@@ -1,0 +1,55 @@
+{
+    "name": "studiosidekicks/alfred",
+    "type": "library",
+    "description": "Content Management System with support for Multi-Language Website",
+    "keywords": [],
+    "homepage": "https://www.biggerpicture.agency",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Monika Bernaś",
+            "email": "monika@biggerpicture.agency",
+            "role": "Back-End Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "tymon/jwt-auth": "^1.0.0-rc.5",
+        "cartalyst/sentinel": "^3.0",
+        "laravel/framework": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Studiosidekicks\\Alfred\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        },
+        "component": "package",
+        "laravel": {
+            "providers": [
+                "Studiosidekicks\\Alfred\\Providers\\AlfredProvider"
+            ],
+            "aliases": {
+                "BackAuth": "Studiosidekicks\\Alfred\\Auth\\Back\\Facades\\BackAuth"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    }
+}
