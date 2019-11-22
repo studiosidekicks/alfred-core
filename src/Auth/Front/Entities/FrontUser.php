@@ -5,11 +5,13 @@ namespace Studiosidekicks\Alfred\Auth\Front\Entities;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Studiosidekicks\Alfred\Auth\Front\Contracts\UserRepositoryContract;
 
-class FrontUser extends Authenticatable
+class FrontUser extends Authenticatable implements UserRepositoryContract
 {
     use Notifiable;
 
+    protected $table = 'website_users';
     /**
      * The attributes that are mass assignable.
      *

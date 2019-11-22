@@ -13,7 +13,7 @@ class StudiosidekicksCreateFrontUserAuthTables extends Migration
      */
     public function up()
     {
-        Schema::create('front_users', function (Blueprint $table) {
+        Schema::create('website_users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('first_name');
             $table->string('last_name');
@@ -37,6 +37,6 @@ class StudiosidekicksCreateFrontUserAuthTables extends Migration
     public function down()
     {
         Schema::dropIfExists('password_resets');
-        Schema::dropIfExists('front_users');
+        Schema::dropIfExists('website_users');
     }
 }

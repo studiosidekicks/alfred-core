@@ -10,6 +10,12 @@ return [
             'is_enabled' => env('IS_BACK_AUTH_ENABLED', true),
             'model' => Studiosidekicks\Alfred\Auth\Back\Entities\BackUser::class,
             'role_model' => Studiosidekicks\Alfred\Auth\Back\Entities\Role::class,
+            'primary_account' => [
+                'email' => env('PRIMARY_ACCOUNT_EMAIL'),
+            ]
         ]
-    ]
+    ],
+    'api' => [
+        'version' => 1,
+    ],
 ];

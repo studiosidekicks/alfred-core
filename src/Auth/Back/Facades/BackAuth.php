@@ -8,6 +8,6 @@ class BackAuth extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'studiosidekicks.back_auth';
+        return 'studiosidekicks.alfred.back_auth';
     }
 }

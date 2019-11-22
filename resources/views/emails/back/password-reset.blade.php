@@ -1,0 +1,1 @@
+<a href="{{ $url }}" title="Password Reset link">Password reset link</a>

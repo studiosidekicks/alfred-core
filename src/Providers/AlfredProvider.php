@@ -3,10 +3,10 @@
 namespace  Studiosidekicks\Alfred\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Studiosidekicks\Alfred\Auth\Back\Facades\BackAuth;
-use Studiosidekicks\Alfred\Auth\Back\Repositories\RoleRepository;
-use Studiosidekicks\Alfred\Auth\Back\Repositories\UserRepository;
-use Studiosidekicks\Alfred\Auth\Back\Services\BackAuthService;
+use Studiosidekicks\Alfred\Auth\Back\Providers\BackAuthServiceProvider;
+use Studiosidekicks\Alfred\Commands\SetupPrimaryAccount;
+use Studiosidekicks\Alfred\Auth\Front\Facades\FrontAuth;
+use Studiosidekicks\Alfred\Auth\Front\Services\FrontAuthService;
 
 class AlfredProvider extends ServiceProvider
 {
@@ -15,7 +15,7 @@ class AlfredProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->setOverrides();
+        //
     }
 
     /**
@@ -23,8 +23,11 @@ class AlfredProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerOtherProviders();
+        $this->registerCommands();
+
         $this->prepareResources();
-        $this->registerBackAuth();
+        $this->registerFrontAuth();
     }
 
     /**
@@ -48,58 +51,10 @@ class AlfredProvider extends ServiceProvider
         $this->publishes([
             $migrations => $this->app->databasePath().'/migrations',
         ], 'migrations');
-    }
 
-    /**
-     * Registers the users.
-     *
-     * @return void
-     */
-    private function registerBackUsers()
-    {
-        $this->app->singleton('studiosidekicks.back_auth.users', function ($app) {
-            $config = $app['config']->get('studiosidekicks.base.auth.back');
-
-            return new UserRepository(
-                $app['sentinel.hasher'],
-                $app['events'],
-                $config['model']
-            );
-        });
-    }
-
-    /**
-     * Registers the roles.
-     *
-     * @return void
-     */
-    private function registerBackRoles()
-    {
-        $this->app->singleton('studiosidekicks.back_auth.roles', function ($app) {
-            $config = $app['config']->get('studiosidekicks.base.auth.back');
-
-            return new RoleRepository($config['role_model']);
-        });
-    }
-
-    /**
-     * Registers sentinel.
-     *
-     * @return void
-     */
-    protected function registerBackAuth()
-    {
-        $this->registerBackUsers();
-        $this->registerBackRoles();
-
-        $this->app->singleton('studiosidekicks.back_auth', function ($app) {
-            return new BackAuthService(
-                $app['studiosidekicks.back_auth.users'],
-                $app['studiosidekicks.back_auth.roles']
-            );
-        });
-
-        $this->app->alias('BackAuth', BackAuth::class);
+        $this->publishes([
+            __DIR__ . '/../../resources/views' => resource_path('views/vendor/alfred'),
+        ]);
     }
 
     /**
@@ -107,45 +62,33 @@ class AlfredProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [
-            'studiosidekicks.back_auth',
-            'studiosidekicks.back_auth.users',
-            'studiosidekicks.back_auth.roles',
-        ];
+        return [];
     }
 
-    /**
-     * Performs the necessary overrides.
-     *
-     * @return void
-     */
-    protected function setOverrides()
+    private function registerOtherProviders()
     {
-        $config = $this->app['config']->get('studiosidekicks.base');
+        $this->app->register(RouteServiceProvider::class);
+        $this->app->register(BackAuthServiceProvider::class);
+    }
 
-        if ($config['auth']['back']['is_enabled']) {
-            //Auth for back (app/cms) users
-            $backUserModel = $config['auth']['back']['model'];
+    private function registerFrontAuth()
+    {
+        $config = config('studiosidekicks.alfred');
 
-            $roles = $config['auth']['back']['role_model'];
+        if (!empty($config['auth']['front']['is_enabled'])) {
+            $this->app->singleton('studiosidekicks.alfred.front_auth', function ($app) use ($config) {
+                return new FrontAuthService($config['auth']['front']['model']);
+            });
 
-            if (class_exists($backUserModel)) {
+            $this->app->alias('FrontAuth', FrontAuth::class);
 
-                if (method_exists($backUserModel, 'setRolesModel')) {
-                    forward_static_call_array([$backUserModel, 'setRolesModel'], [$roles]);
-                }
-            }
-
-            if (class_exists($roles) && method_exists($roles, 'setUsersModel')) {
-                forward_static_call_array([$roles, 'setUsersModel'], [$backUserModel]);
-            }
         }
+    }
 
-
-        if ($config['auth']['front']['is_enabled']) {
-            //Standard auth for front users
-            $frontUserModel = $config['auth']['front']['model'];
-        }
-
+    private function registerCommands()
+    {
+        $this->commands([
+            SetupPrimaryAccount::class
+        ]);
     }
 }

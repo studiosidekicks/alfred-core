@@ -18,6 +18,7 @@ class StudiosidekicksCreateBackUserAuthTables extends Migration
             $table->increments('id');
             $table->string('email');
             $table->string('password');
+            $table->boolean('is_primary')->default(0);
             $table->text('permissions')->nullable();
             $table->timestamp('last_login')->nullable();
             $table->string('first_name')->nullable();
