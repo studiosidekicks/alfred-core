@@ -43,18 +43,18 @@ class AlfredProvider extends ServiceProvider
 
         $this->publishes([
             $config => config_path('studiosidekicks.alfred.php'),
-        ], 'config');
+        ], 'alfred-config');
 
         // Publish migrations
         $migrations = realpath(__DIR__ . '/../../database/migrations');
 
         $this->publishes([
             $migrations => $this->app->databasePath().'/migrations',
-        ], 'migrations');
+        ], 'alfred-migrations');
 
         $this->publishes([
             __DIR__ . '/../../resources/views' => resource_path('views/vendor/alfred'),
-        ]);
+        ], 'alfred-templates');
     }
 
     /**
