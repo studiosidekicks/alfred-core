@@ -4,6 +4,7 @@ namespace  Studiosidekicks\Alfred\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Studiosidekicks\Alfred\Auth\Back\Providers\BackAuthServiceProvider;
+use Studiosidekicks\Alfred\Commands\Install;
 use Studiosidekicks\Alfred\Commands\SetupPrimaryAccount;
 use Studiosidekicks\Alfred\Auth\Front\Facades\FrontAuth;
 use Studiosidekicks\Alfred\Auth\Front\Services\FrontAuthService;
@@ -23,11 +24,12 @@ class AlfredProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerOtherProviders();
-        $this->registerCommands();
-
         $this->prepareResources();
+        $this->registerOtherProviders();
+
         $this->registerFrontAuth();
+
+        $this->registerCommands();
     }
 
     /**
@@ -88,7 +90,8 @@ class AlfredProvider extends ServiceProvider
     private function registerCommands()
     {
         $this->commands([
-            SetupPrimaryAccount::class
+            SetupPrimaryAccount::class,
+            Install::class,
         ]);
     }
 }

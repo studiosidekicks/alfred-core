@@ -11,7 +11,7 @@ class SetupPrimaryAccount extends Command
      *
      * @var string
      */
-    protected $name = 'alfred:setup-primary-account';
+    protected $signature = 'alfred:setup-primary-account {email}';
 
     /**
      * The console command description.
@@ -32,10 +32,10 @@ class SetupPrimaryAccount extends Command
      */
     public function handle()
     {
-        $primaryAccountEmail = config('studiosidekicks.alfred.auth.back.primary_account.email');
+        $primaryAccountEmail = $this->argument('email');
 
         if (empty($primaryAccountEmail)) {
-            $this->error('No primary account email provided in env');
+            $this->error('No primary account email provided');
             return;
         }
 
