@@ -4,7 +4,7 @@ namespace Studiosidekicks\Alfred\Auth\Back\Contracts;
 
 interface BackAuthServiceContract
 {
-    public function otherPrimaryAccountExists(string $email);
+    public function checkOtherPrimaryAccountExistence();
 
     public function createPrimaryAccount(string $email);
 

@@ -21,9 +21,9 @@ class BackAuthService implements BackAuthServiceContract
         $this->rolesRepository = $rolesRepository;
     }
 
-    public function otherPrimaryAccountExists(string $email)
+    public function checkOtherPrimaryAccountExistence()
     {
-        return [['exists' => $this->usersRepository->checkExistenceOfPrimaryAccount($email)], false];
+        return [['exists' => $this->usersRepository->checkExistenceOfPrimaryAccount()], false];
     }
 
     public function createPrimaryAccount(string $email)

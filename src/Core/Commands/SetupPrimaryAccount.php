@@ -1,8 +1,9 @@
 <?php
-namespace Studiosidekicks\Alfred\Commands;
+namespace Studiosidekicks\Alfred\Core\Commands;
 
 use Illuminate\Console\Command;
 use BackAuth;
+use Illuminate\Support\Facades\Validator;
 
 class SetupPrimaryAccount extends Command
 {
@@ -11,7 +12,7 @@ class SetupPrimaryAccount extends Command
      *
      * @var string
      */
-    protected $signature = 'alfred:setup-primary-account {email}';
+    protected $signature = 'alfred:setup-primary-account';
 
     /**
      * The console command description.
@@ -32,17 +33,23 @@ class SetupPrimaryAccount extends Command
      */
     public function handle()
     {
-        $primaryAccountEmail = $this->argument('email');
+        $this->info('Creating primary CMS account...');
 
-        if (empty($primaryAccountEmail)) {
-            $this->error('No primary account email provided');
-            return;
-        }
-
-        list($data, $error) = BackAuth::otherPrimaryAccountExists($primaryAccountEmail);
+        list($data, $error) = BackAuth::checkOtherPrimaryAccountExistence();
 
         if ($error || $data['exists']) {
             $this->error('Other primary account already exists.');
+            return;
+        }
+
+        $primaryAccountEmail = $this->ask('What is the email for primary account?');
+
+        $validator = Validator::make(['email' => $primaryAccountEmail], [
+            'email' => 'required|email|unique:users|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            $this->error($validator->errors()->first('email'));
             return;
         }
 

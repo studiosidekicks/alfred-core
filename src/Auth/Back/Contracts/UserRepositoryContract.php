@@ -4,7 +4,7 @@ namespace Studiosidekicks\Alfred\Auth\Back\Contracts;
 
 interface UserRepositoryContract
 {
-    public function checkExistenceOfPrimaryAccount(string $email);
+    public function checkExistenceOfPrimaryAccount();
 
     public function findByEmail(string $email);
 

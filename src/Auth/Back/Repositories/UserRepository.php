@@ -13,9 +13,9 @@ class UserRepository extends IlluminateUserRepository implements UserRepositoryC
         return app()->make(config('studiosidekicks.alfred.auth.back.model'));
     }
 
-    public function checkExistenceOfPrimaryAccount(string $email)
+    public function checkExistenceOfPrimaryAccount()
     {
-        return $this->model()->whereEmail($email)->orWhere('is_primary', 1)->exists();
+        return $this->model()->orWhere('is_primary', 1)->exists();
     }
 
     public function findByEmail(string $email)

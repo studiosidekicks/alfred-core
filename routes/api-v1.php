@@ -14,3 +14,11 @@ Route::prefix('auth')->namespace('Auth\Back')->group(function () {
         });
     });
 });
+
+Route::middleware('back-auth')->group(function () {
+    Route::get('dashboard', 'Dashboard\ApiController@index');
+
+    Route::prefix('log')->namespace('Log')->group(function () {
+
+    });
+});

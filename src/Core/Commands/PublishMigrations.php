@@ -1,24 +1,24 @@
 <?php
-namespace Studiosidekicks\Alfred\Commands;
+namespace Studiosidekicks\Alfred\Core\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
-class Install extends Command
+class PublishMigrations extends Command
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $signature = 'alfred:install';
+    protected $signature = 'alfred:publish-migrations';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Does required actions after Alfred package installation';
+    protected $description = 'Publishes migrations';
 
     public function __construct()
     {
@@ -33,23 +33,12 @@ class Install extends Command
     public function handle()
     {
         $this->info('Publishing migrations...');
+
         Artisan::call('vendor:publish', [
             '--provider' => 'Studiosidekicks\Alfred\Providers\AlfredProvider',
             '--tag' => 'alfred-migrations'
         ]);
 
-        $this->info('Migrating...');
-        Artisan::call('migrate');
-
-        $this->info('Creating primary CMS account...');
-
-        $email = $this->ask('What is the email for primary account?');
-
-        Artisan::call('alfred:setup-primary-account', [
-            'email' => $email,
-        ]);
-        echo Artisan::output();
-
-        $this->info('Installation has finished!');
+        $this->info('Publishing migrations has finished!');
     }
 }
