@@ -51,6 +51,11 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware(['web'])
             ->namespace($this->namespace)
             ->group(__DIR__ . '/../../routes/api-v1.php');
+
+
+        Route::get('cms', function () {
+            return view('alfred::cms.master');
+        })->middleware('web');
     }
 
     /**
