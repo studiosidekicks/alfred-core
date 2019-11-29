@@ -2,6 +2,7 @@
 
 namespace  Studiosidekicks\Alfred\Providers;
 
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 use Illuminate\Support\ServiceProvider;
 use Studiosidekicks\Alfred\Auth\Back\Providers\BackAuthServiceProvider;
 use Studiosidekicks\Alfred\Core\Commands\Install;
@@ -61,6 +62,8 @@ class AlfredProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../resources/views' => resource_path('views/vendor/alfred'),
         ], 'alfred-templates');
+
+        $this->app->make(EloquentFactory::class)->load(base_path('/../../databases/factories'));
     }
 
     /**

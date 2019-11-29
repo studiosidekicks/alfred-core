@@ -46,10 +46,11 @@
     "prefer-stable": true,
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Studiosidekicks\\Alfred\\Tests\\": "tests/"
         }
     },
     "require-dev": {
+        "orchestra/testbench": "^4.0",
         "phpunit/phpunit": "^8.4"
     }
 }

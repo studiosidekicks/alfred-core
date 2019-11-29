@@ -7,7 +7,6 @@ use Illuminate\Auth\Authenticatable;
 use Studiosidekicks\Alfred\Auth\Back\Events\ResetPasswordStarted;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Activation;
 use Reminder;
