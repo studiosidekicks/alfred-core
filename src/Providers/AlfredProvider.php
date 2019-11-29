@@ -69,7 +69,6 @@ class AlfredProvider extends ServiceProvider
 
     private function registerOtherProviders()
     {
-        $this->app->register(RouteServiceProvider::class);
         $this->app->register(BackAuthServiceProvider::class);
     }
 
