@@ -41,7 +41,7 @@ class ResetPasswordTest extends TestCase
         $user = $this->createActivatedUser();
 
         $response = $this->json('post', 'api/v1/auth/password/reminder', [
-            'email' => 'monika@biggerpicture.agency'
+            'email' => 'test@example.com'
         ]);
 
         Event::assertDispatched(ResetPasswordStarted::class);
@@ -51,34 +51,102 @@ class ResetPasswordTest extends TestCase
         $response->assertStatus(200);
     }
 
-//    public function test_reset_link_is_valid()
-//    {
-//        $user = $this->createActivatedUser();
-//
-//
-//    }
+    public function test_reset_link_is_valid()
+    {
+        $user = $this->createActivatedUser();
 
-//    public function test_new_password_needs_to_be_confirmed()
-//    {
-//
-//    }
-//
-//    public function test_user_can_set_new_password()
-//    {
-//
-//    }
-//
+        $response = $this->json('post', 'api/v1/auth/password/reminder', [
+            'email' => 'test@example.com'
+        ]);
 
-//
-//    public function test_link_cannot_be_used_again()
-//    {
-//
-//    }
+        $reminder = $user->reminders()->first();
+
+        $response = $this->json('get', 'api/v1/auth/password/' . $reminder->code . '/'. $user->id . '/check');
+
+        $response->assertStatus(200)
+            ->assertJsonFragment(['message' => 'Url is correct.']);
+    }
+
+    public function test_new_password_needs_to_be_confirmed()
+    {
+        $user = $this->createActivatedUser();
+
+        $response = $this->json('post', 'api/v1/auth/password/reminder', [
+            'email' => 'test@example.com'
+        ]);
+
+        $reminder = $user->reminders()->first();
+
+        $response = $this->json('post', 'api/v1/auth/password/' . $reminder->code . '/'. $user->id . '/reset',
+            ['password' => 'password']
+        );
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['password' => 'The password confirmation does not match.']);
+    }
+
+    public function test_new_password_does_not_match_confirmation()
+    {
+        $user = $this->createActivatedUser();
+
+        $response = $this->json('post', 'api/v1/auth/password/reminder', [
+            'email' => 'test@example.com'
+        ]);
+
+        $reminder = $user->reminders()->first();
+
+        $response = $this->json('post', 'api/v1/auth/password/' . $reminder->code . '/'. $user->id . '/reset',
+            ['password' => 'password', 'password_confirmation' => 'invalid-password']
+        );
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['password' => 'The password confirmation does not match.']);
+    }
+
+    public function test_user_can_set_new_password()
+    {
+        $user = $this->createActivatedUser();
+
+        $response = $this->json('post', 'api/v1/auth/password/reminder', [
+            'email' => 'test@example.com'
+        ]);
+
+        $reminder = $user->reminders()->first();
+
+        $response = $this->json('post', 'api/v1/auth/password/' . $reminder->code . '/'. $user->id . '/reset',
+            ['password' => 'password', 'password_confirmation' => 'password']
+        );
+
+        $response->assertStatus(200)
+            ->assertJsonFragment([
+                'message' => 'Password changed successfully.'
+            ]);
+    }
+
+    public function test_link_cannot_be_used_again()
+    {
+        $user = $this->createActivatedUser();
+
+        $response = $this->json('post', 'api/v1/auth/password/reminder', [
+            'email' => 'test@example.com'
+        ]);
+
+        $reminder = $user->reminders()->first();
+
+        $response = $this->json('post', 'api/v1/auth/password/' . $reminder->code . '/'. $user->id . '/reset',
+            ['password' => 'password', 'password_confirmation' => 'password']
+        );
+
+        $response = $this->json('get', 'api/v1/auth/password/' . $reminder->code . '/'. $user->id . '/check');
+
+        $response->assertStatus(400)
+            ->assertJsonFragment(['message' => 'The url you entered is incorrect.']);
+    }
 
     private function loginUser(string $password, bool $rememberMe = false)
     {
         return $this->json('post','/api/v1/auth/login', [
-            'email' => 'monika@biggerpicture.agency',
+            'email' => 'test@example.com',
             'password' => $password,
             'remember_me' => $rememberMe
         ]);
@@ -87,7 +155,7 @@ class ResetPasswordTest extends TestCase
     private function createActivatedUser()
     {
         $user = factory(BackUser::class)->create([
-            'email' => 'monika@biggerpicture.agency',
+            'email' => 'test@example.com',
         ]);
 
         $user->completeActivation();
