@@ -2,7 +2,7 @@
 
 namespace Studiosidekicks\Alfred\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use \Illuminate\Routing\Controller;
 
 class ApiResponseController extends Controller
 {

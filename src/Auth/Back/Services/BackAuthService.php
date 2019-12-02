@@ -2,6 +2,7 @@
 
 namespace Studiosidekicks\Alfred\Auth\Back\Services;
 
+use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 use Illuminate\Support\Facades\DB;
 use Studiosidekicks\Alfred\Auth\Back\Contracts\BackAuthServiceContract;
 use Studiosidekicks\Alfred\Auth\Back\Contracts\RoleRepositoryContract;
@@ -58,9 +59,15 @@ class BackAuthService implements BackAuthServiceContract
 
     public function login(string $email, string $password, bool $rememberMe)
     {
-        if (Sentinel::authenticate(compact('email', 'password'), $rememberMe)) {
+        try {
+            if (Sentinel::authenticate(compact('email', 'password'), $rememberMe)) {
 
-            return ['You have successfully logged in', false];
+                return ['You have successfully logged in', false];
+            }
+        } catch (ThrottlingException $exception) {
+            return [$exception->getMessage(), true];
+        } catch (\Exception $exception) {
+            return [$exception->getMessage(), true];
         }
 
         return ['Invalid credentials', true];

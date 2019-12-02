@@ -2,59 +2,94 @@
 
 namespace Tests\Feature\Auth\Back;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Studiosidekicks\Alfred\Auth\Back\Entities\BackUser;
 use Tests\TestCase;
 use Sentinel;
 
 class loginTest extends TestCase
 {
-
-    public function test_user_cannot_use_endpoint_when_authenticated()
-    {
-        $this->assertTrue(true);
-    }
+    use RefreshDatabase;
 
     public function test_user_can_login_with_correct_details()
     {
-        $user = factory(BackUser::class)->create([
-            'email' => 'test@example.com'
-        ]);
+        $this->createActivatedUser();
 
-        $user->completeActivation();
+        $response = $this->loginUser('password');
 
-        $this->assertIsNotBool(Sentinel::authenticate([
-            'email' => 'test@example.com',
-            'password' => 'password'
-        ]));
+        $response->assertStatus(200)
+            ->assertJsonFragment(['message' => 'You have successfully logged in']);
+    }
+
+    public function test_user_can_logout_when_authenticated()
+    {
+        $this->createActivatedUser();
+
+        $response = $this->loginUser('password');
+        $response = $this->json('post', '/api/v1/auth/logout');
+
+        $response->assertStatus(200)
+            ->assertJsonFragment(['message' => 'You have been successfully logout.']);
+    }
+
+    public function test_user_cannot_use_login_endpoint_when_authenticated()
+    {
+        $this->createActivatedUser();
+
+        $response = $this->loginUser('password');
+        $response = $this->loginUser('password');
+
+        $response->assertStatus(403)
+            ->assertJsonFragment(['message' => 'Access forbidden']);
     }
 
     public function test_user_cannot_login_with_wrong_password()
     {
-        $this->assertTrue(true);
+        $this->createActivatedUser();
+
+        $response = $this->loginUser('invalid-password');
+
+        $response->assertStatus(400)
+            ->assertJsonFragment(['message' => 'Invalid credentials']);
 
     }
 
     public function test_user_cannot_login_with_non_existent_email()
     {
-        $this->assertTrue(true);
+        $response = $this->loginUser('password');
 
+        $response->assertStatus(400)
+            ->assertJsonFragment(['message' => 'Invalid credentials']);
     }
 
-    public function test_user_can_logout_when_authenticated()
+    public function test_user_cannot_login_with_failure_more_than_five_times_in_a_fifteen_minutes()
     {
-        $this->assertTrue(true);
+        $this->createActivatedUser();
 
+        for ($i = 0; $i <= 5; $i++) {
+            $response = $this->loginUser('invalid-password');
+        }
+
+        $response->assertStatus(400);
     }
 
-    public function test_user_cannot_login_with_failure_more_than_five_times_in_a_minute()
+    private function loginUser(string $password, bool $rememberMe = false)
     {
-        $this->assertTrue(true);
-
+        return $this->json('post','/api/v1/auth/login', [
+            'email' => 'test@example.com',
+            'password' => $password,
+            'remember_me' => $rememberMe
+        ]);
     }
 
-    public function test_user_gets_correct_remember_me_cookie()
+    private function createActivatedUser()
     {
-        $this->assertTrue(true);
-    }
+        $user = factory(BackUser::class)->create([
+            'email' => 'test@example.com',
+        ]);
 
+        $user->completeActivation();
+
+        return $user;
+    }
 }

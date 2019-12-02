@@ -10,11 +10,6 @@ use Studiosidekicks\Alfred\Http\Controllers\ApiResponseController;
 
 class AuthController extends ApiResponseController
 {
-    public function __construct()
-    {
-        $this->middleware('back-auth')->only('logout');
-    }
-
     public function postLogin(LoginRequest $request)
     {
         list($response, $error) = BackAuth::login($request->get('email'), $request->get('password'), $request->filled('remember_me'));

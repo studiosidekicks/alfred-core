@@ -3,17 +3,14 @@
 namespace Studiosidekicks\Alfred\Auth\Back\Entities;
 
 use Cartalyst\Sentinel\Users\EloquentUser;
-use Illuminate\Auth\Authenticatable;
 use Studiosidekicks\Alfred\Auth\Back\Events\ResetPasswordStarted;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Activation;
 use Reminder;
 
-class BackUser extends EloquentUser implements JWTSubject, AuthenticatableContract
+class BackUser extends EloquentUser
 {
-    use Notifiable, Authenticatable;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.

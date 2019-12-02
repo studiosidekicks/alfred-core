@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Studiosidekicks\Alfred\Auth\Back\Entities\BackUser;
 use Studiosidekicks\Alfred\Auth\Back\Facades\BackAuth;
 use Studiosidekicks\Alfred\Auth\Back\Middleware\BackAuthMiddleware;
+use Studiosidekicks\Alfred\Auth\Back\Middleware\BackNoAuthMiddleware;
 use Studiosidekicks\Alfred\Auth\Back\Observers\BackUserObserver;
 use Studiosidekicks\Alfred\Auth\Back\Repositories\RoleRepository;
 use Studiosidekicks\Alfred\Auth\Back\Repositories\UserRepository;
@@ -20,6 +21,7 @@ class BackAuthServiceProvider extends ServiceProvider
         BackUser::observe(BackUserObserver::class);
 
         $router->aliasMiddleware('back-auth', BackAuthMiddleware::class);
+        $router->aliasMiddleware('back-no-auth', BackNoAuthMiddleware::class);
 
         $this->loadViewsFrom(__DIR__ . '/../../../../resources/views', 'alfred');
     }
