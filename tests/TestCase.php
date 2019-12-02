@@ -6,6 +6,7 @@ use Cartalyst\Sentinel\Laravel\Facades\Activation;
 use Cartalyst\Sentinel\Laravel\Facades\Reminder;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Cartalyst\Sentinel\Laravel\SentinelServiceProvider;
+use Studiosidekicks\Alfred\Log\Facades\Signing;
 use Studiosidekicks\Alfred\Providers\AlfredProvider;
 use Studiosidekicks\Alfred\Providers\RouteServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
@@ -37,6 +38,7 @@ abstract class TestCase extends OrchestraTestCase
             'Activation' => Activation::class,
             'Reminder' => Reminder::class,
             'Sentinel' => Sentinel::class,
+            'Signing' => Signing::class,
         ];
     }
 

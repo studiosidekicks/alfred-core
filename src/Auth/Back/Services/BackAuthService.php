@@ -8,6 +8,7 @@ use Studiosidekicks\Alfred\Auth\Back\Contracts\BackAuthServiceContract;
 use Studiosidekicks\Alfred\Auth\Back\Contracts\RoleRepositoryContract;
 use Studiosidekicks\Alfred\Auth\Back\Contracts\UserRepositoryContract;
 use Sentinel;
+use Signing;
 
 class BackAuthService implements BackAuthServiceContract
 {
@@ -62,15 +63,19 @@ class BackAuthService implements BackAuthServiceContract
         try {
             if (Sentinel::authenticate(compact('email', 'password'), $rememberMe)) {
 
+                Signing::insert($email);
                 return ['You have successfully logged in', false];
             }
         } catch (ThrottlingException $exception) {
-            return [$exception->getMessage(), true];
+            $errorMessage = $exception->getMessage();
         } catch (\Exception $exception) {
-            return [$exception->getMessage(), true];
+            $errorMessage = $exception->getMessage();
         }
 
-        return ['Invalid credentials', true];
+        $errorMessage = !empty($errorMessage) ? $errorMessage : 'Invalid credentials';
+        Signing::insert($email, $errorMessage);
+
+        return [$errorMessage, true];
     }
 
     public function logout()

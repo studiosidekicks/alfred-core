@@ -73,6 +73,28 @@ class loginTest extends TestCase
         $response->assertStatus(400);
     }
 
+    public function test_signing_log_is_inserted_after_successful_login()
+    {
+        $user = $this->createActivatedUser();
+
+        $response = $this->loginUser('password');
+
+        $this->assertTrue($user->signings()->where('is_successful', true)->exists());
+    }
+
+    public function test_signing_log_is_inserted_after_unsuccessful_login()
+    {
+        $user = $this->createActivatedUser();
+
+        $response = $this->loginUser('invalid-password');
+
+        $this->assertTrue($user->signings()->where([
+            'is_successful' => false,
+            'message' => 'Invalid credentials'
+        ])->exists());
+
+    }
+
     private function loginUser(string $password, bool $rememberMe = false)
     {
         return $this->json('post','/api/v1/auth/login', [

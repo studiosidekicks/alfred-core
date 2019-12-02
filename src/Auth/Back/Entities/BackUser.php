@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Activation;
 use Reminder;
 use Studiosidekicks\Alfred\Auth\Back\Mail\PasswordReset;
+use Studiosidekicks\Alfred\Log\Entities\LogSigning;
 
 class BackUser extends EloquentUser
 {
@@ -87,5 +88,10 @@ class BackUser extends EloquentUser
     public function completeResetPassword(string $code, string $password)
     {
         return Reminder::complete($this, $code, $password);
+    }
+
+    public function signings()
+    {
+        return $this->hasMany(LogSigning::class,'email', 'email');
     }
 }

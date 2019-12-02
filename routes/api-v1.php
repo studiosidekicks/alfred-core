@@ -8,11 +8,11 @@ Route::prefix('auth')->namespace('Auth\Back')->group(function () {
         Route::post('login', 'AuthController@postLogin');
 
         Route::prefix('password')->group(function () {
-            Route::post('reminder', 'AuthController@sendPasswordReminder');
+            Route::post('reminder', 'ResetPasswordController@sendPasswordReminder');
 
             Route::prefix('{code}/{userId}')->group(function () {
-                Route::get('check', 'AuthController@verifyPasswordResetData');
-                Route::post('reset', 'AuthController@resetPassword');
+                Route::get('check', 'ResetPasswordController@verifyPasswordResetData');
+                Route::post('reset', 'ResetPasswordController@resetPassword');
             });
         });
     });

@@ -38,7 +38,10 @@
                 "Studiosidekicks\\Alfred\\Providers\\AlfredProvider"
             ],
             "aliases": {
-                "BackAuth": "Studiosidekicks\\Alfred\\Auth\\Back\\Facades\\BackAuth"
+                "BackAuth": "Studiosidekicks\\Alfred\\Auth\\Back\\Facades\\BackAuth",
+                "Operation": "Studiosidekicks\\Alfred\\Log\\Facades\\Operation",
+                "Error": "Studiosidekicks\\Alfred\\Log\\Facades\\Error",
+                "Signing": "Studiosidekicks\\Alfred\\Log\\Facades\\Signing"
             }
         }
     },
