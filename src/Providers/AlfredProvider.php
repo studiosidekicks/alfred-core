@@ -7,7 +7,6 @@ use Illuminate\Support\ServiceProvider;
 use Studiosidekicks\Alfred\Auth\Back\Providers\BackAuthServiceProvider;
 use Studiosidekicks\Alfred\Core\Commands\Install;
 use Studiosidekicks\Alfred\Core\Commands\PublishMigrations;
-use Studiosidekicks\Alfred\Core\Commands\SetupPrimaryAccount;
 use Studiosidekicks\Alfred\Auth\Front\Facades\FrontAuth;
 use Studiosidekicks\Alfred\Auth\Front\Services\FrontAuthService;
 use Studiosidekicks\Alfred\Core\Providers\AlfredCoreServiceProvider;
@@ -102,7 +101,6 @@ class AlfredProvider extends ServiceProvider
     {
         $this->commands([
             PublishMigrations::class,
-            SetupPrimaryAccount::class,
             Install::class,
         ]);
     }

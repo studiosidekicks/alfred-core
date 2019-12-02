@@ -4,7 +4,10 @@ namespace Studiosidekicks\Alfred\Core\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Validator;
+use Studiosidekicks\Alfred\Language\Entities\Language;
 use Studiosidekicks\Alfred\Providers\RouteServiceProvider;
+use BackAuth;
 
 class Install extends Command
 {
@@ -36,23 +39,13 @@ class Install extends Command
     {
         $this->info('Installation of Alfred has started!');
 
-        Artisan::call('alfred:publish-migrations');
-        echo Artisan::output();
+        $this->publishAndRunMigrations();
 
-        $this->info('Migrating...');
-        Artisan::call('migrate');
-        echo Artisan::output();
+        $this->addRouteServiceProvider();
 
-        Artisan::call('alfred:setup-primary-account');
-        echo Artisan::output();
+        $this->setupPrimaryAccount();
 
-        $this->info('Adding RouteServiceProvider to config...');
-
-        $this->writeAppConfigFile($this->getAlfredProvidersToBeRegisteredManually());
-
-        $this->info('RouteServiceProvider added  successfully');
-
-        Artisan::call('optimize');
+        $this->setupPrimaryLanguage();
 
         $this->info('Installation has finished!');
     }
@@ -115,5 +108,94 @@ class Install extends Command
             }
         }
         return $filtered;
+    }
+
+    private function setupPrimaryLanguage()
+    {
+
+        $this->info('Primary Language Settings...');
+
+        if (Language::where('is_primary_language', true)->exists()) {
+            $this->error('Primary language already exists!');
+            return;
+        }
+
+        $languageName = $this->ask('What is language name?', 'English');
+        $languageSlug = $this->ask('What should be language slug?');
+        $languageHreflang = $this->ask('What is language hreflang attribute value?', 'en');
+
+        Language::create([
+            'name' => $languageName,
+            'slug' => $languageSlug,
+            'hreflang' => $languageHreflang,
+            'is_primary_language' => true,
+        ]);
+
+        $this->info('Language setup finished');
+    }
+
+    public function setupPrimaryAccount()
+    {
+        $this->info('Creating primary CMS account...');
+
+        list($data, $error) = BackAuth::checkOtherPrimaryAccountExistence();
+
+        if ($error || $data['exists']) {
+            $this->error('Other primary account already exists.');
+            return;
+        }
+
+        $primaryAccountEmail = $this->askForEmail();
+
+        $password = BackAuth::createPrimaryAccount($primaryAccountEmail);
+
+        if ($password) {
+            $this->info($password);
+            return;
+        }
+
+        $this->error('Account has not been setup.');
+        return;
+    }
+
+    private function askForEmail()
+    {
+        $primaryAccountEmail = $this->ask('What is the email for primary account?');
+
+        $validator = Validator::make(['email' => $primaryAccountEmail], [
+            'email' => 'required|email|unique:users|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            $this->error($validator->errors()->first('email'));
+
+            $this->askForEmail();
+        }
+
+        return $primaryAccountEmail;
+    }
+
+    private function addRouteServiceProvider()
+    {
+        $this->info('Adding RouteServiceProvider to config...');
+
+        $this->writeAppConfigFile($this->getAlfredProvidersToBeRegisteredManually());
+
+        $this->info('RouteServiceProvider added  successfully');
+
+        Artisan::call('optimize');
+    }
+
+    private function publishAndRunMigrations()
+    {
+        Artisan::call('alfred:publish-migrations');
+
+        echo Artisan::output();
+
+        $this->info('Migrating...');
+
+        Artisan::call('migrate');
+
+        echo Artisan::output();
     }
 }

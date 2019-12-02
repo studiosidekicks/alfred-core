@@ -9,8 +9,12 @@ class Language extends AlfredModel
     protected $table = 'languages';
     protected $fillable = [
         'name',
-        'code',
         'slug',
         'hreflang',
+        'is_primary_language',
+    ];
+
+    protected $casts = [
+        'is_primary_language' => 'boolean'
     ];
 }

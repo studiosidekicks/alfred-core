@@ -53,9 +53,7 @@ class RouteServiceProvider extends ServiceProvider
             ->group(__DIR__ . '/../../routes/api-v1.php');
 
 
-        Route::get('cms', function () {
-            return view('alfred::cms.master');
-        })->middleware('web');
+        Route::get('cms', 'CmsController@index')->middleware('web');
     }
 
     /**

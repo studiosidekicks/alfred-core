@@ -17,9 +17,9 @@ class StudiosidekicksCreateLanguagesTables extends Migration
         Schema::create('languages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('code');
-            $table->string('slug');
+            $table->string('slug')->nullable();
             $table->string('hreflang');
+            $table->boolean('is_primary_language')->default(0);
 
             $table->timestamps();
         });
