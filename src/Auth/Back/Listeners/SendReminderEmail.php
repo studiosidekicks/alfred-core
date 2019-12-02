@@ -2,8 +2,9 @@
 
 namespace Studiosidekicks\Alfred\Auth\Back\Listeners;
 
+use Illuminate\Support\Facades\Mail;
 use Studiosidekicks\Alfred\Auth\Back\Events\ResetPasswordStarted;
-use Studiosidekicks\Alfred\Auth\Back\Jobs\SendPasswordResetReminderEmail;
+use Studiosidekicks\Alfred\Auth\Back\Mail\PasswordReset;
 
 class SendReminderEmail
 {
@@ -25,7 +26,10 @@ class SendReminderEmail
      */
     public function handle(ResetPasswordStarted $event)
     {
-        dispatch(new SendPasswordResetReminderEmail($event->user->email, $event->user->id, $event->reminder->code))
-            ->onQueue('emails');
+        $reminderUrl = url('cms/reset/' . $event->reminder->code . '/' . $event->user->id);
+
+        $message = (new PasswordReset($reminderUrl))->onQueue('emails');
+
+        Mail::to($event->user->email)->queue($message);
     }
 }

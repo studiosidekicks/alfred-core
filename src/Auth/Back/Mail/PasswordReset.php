@@ -2,9 +2,10 @@
 
 namespace Studiosidekicks\Alfred\Auth\Back\Mail;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 
-class PasswordReset extends Mailable
+class PasswordReset extends Mailable implements ShouldQueue
 {
     public $url;
 

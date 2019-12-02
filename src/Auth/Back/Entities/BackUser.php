@@ -3,10 +3,12 @@
 namespace Studiosidekicks\Alfred\Auth\Back\Entities;
 
 use Cartalyst\Sentinel\Users\EloquentUser;
+use Illuminate\Support\Facades\Mail;
 use Studiosidekicks\Alfred\Auth\Back\Events\ResetPasswordStarted;
 use Illuminate\Notifications\Notifiable;
 use Activation;
 use Reminder;
+use Studiosidekicks\Alfred\Auth\Back\Mail\PasswordReset;
 
 class BackUser extends EloquentUser
 {

@@ -29,6 +29,6 @@ class ResetPasswordStarted
      */
     public function broadcastOn()
     {
-        return [];
+        return ['mail'];
     }
 }
