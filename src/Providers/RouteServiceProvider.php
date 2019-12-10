@@ -53,7 +53,7 @@ class RouteServiceProvider extends ServiceProvider
             ->group(__DIR__ . '/../../routes/api-v1.php');
 
 
-        Route::get('cms', 'CmsController@index')->middleware('web');
+        Route::get('cms', $this->namespace . '\CmsController@index')->middleware('web');
     }
 
     /**
