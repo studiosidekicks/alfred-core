@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Studiosidekicks\Alfred\Tests;
 
 use Cartalyst\Sentinel\Laravel\Facades\Activation;
 use Cartalyst\Sentinel\Laravel\Facades\Reminder;

@@ -4,7 +4,7 @@ namespace Tests\Feature\Auth\Back;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Studiosidekicks\Alfred\Auth\Back\Entities\BackUser;
-use Tests\TestCase;
+use Studiosidekicks\Alfred\Tests\TestCase;
 use Sentinel;
 
 class loginTest extends TestCase

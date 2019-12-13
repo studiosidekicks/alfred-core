@@ -181,7 +181,7 @@ class Install extends Command
 
         $this->writeAppConfigFile($this->getAlfredProvidersToBeRegisteredManually());
 
-        $this->info('RouteServiceProvider added  successfully');
+        $this->info('RouteServiceProvider added successfully');
 
         Artisan::call('optimize');
     }

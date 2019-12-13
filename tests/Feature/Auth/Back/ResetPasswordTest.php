@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Studiosidekicks\Alfred\Auth\Back\Entities\BackUser;
 use Studiosidekicks\Alfred\Auth\Back\Events\ResetPasswordStarted;
 use Studiosidekicks\Alfred\Auth\Back\Mail\PasswordReset;
-use Tests\TestCase;
+use Studiosidekicks\Alfred\Tests\TestCase;
 
 class ResetPasswordTest extends TestCase
 {
