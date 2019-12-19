@@ -24,4 +24,19 @@ Route::middleware('back-auth')->group(function () {
     Route::prefix('log')->namespace('Log')->group(function () {
 
     });
+
+    Route::prefix('file-manager')->namespace('FileManager')->group(function () {
+        Route::resource('directories', 'ApiDirectoriesController')->only(['index', 'store', 'update', 'destroy']);
+        Route::post('directories/{directory}/move', 'ApiDirectoriesController@move');
+
+        Route::prefix('files')->group(function () {
+            Route::post('/', 'ApiFilesController@store');
+
+            Route::prefix('{file}')->group(function () {
+                Route::put('/', 'ApiFilesController@update');
+                Route::delete('/', 'ApiFilesController@destroy');
+                Route::get('preview', 'ApiFilesController@getPreviewData');
+            });
+        });
+    });
 });

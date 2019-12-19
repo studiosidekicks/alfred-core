@@ -20,7 +20,7 @@ class StudiosidekicksCreateLogTables extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->string('email');
             $table->string('action');
-            $table->nullableMorphs('operation');
+            $table->nullableMorphs('item');
 
             $table->timestamps();
 

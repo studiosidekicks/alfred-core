@@ -14,9 +14,10 @@
     ],
     "require": {
         "php": "^7.2",
-        "tymon/jwt-auth": "^1.0.0-rc.5",
         "cartalyst/sentinel": "^3.0",
-        "laravel/framework": "^6.0"
+        "doctrine/dbal": "^2.10",
+        "laravel/framework": "^6.0",
+        "tymon/jwt-auth": "^1.0.0-rc.5"
     },
     "autoload": {
         "psr-4": {
