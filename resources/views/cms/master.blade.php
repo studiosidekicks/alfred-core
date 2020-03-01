@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'SPA') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('alfred-assets/js/manifest.js') }}" defer></script>
@@ -16,12 +16,9 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="{{ asset('alfred-assets/css/app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <style>
-        html, body {margin:0;padding:0;}
-        body {font-family: 'Roboto', sans-serif;}
-    </style>
+
+    <link href="{{ asset('alfred-assets/css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app"></div>

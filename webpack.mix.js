@@ -41,7 +41,7 @@ mix
   .setResourceRoot('alfred-assets/')
   .js('resources/js/app.js', 'js')
   .extract()
-  .sass('resources/sass/app.scss', 'public/css/app.css', {
+  .sass('resources/sass/app.scss', 'css/app.css', {
     implementation: require('node-sass'),
   })
   .browserSync(alfredSpaBaseUrl)
