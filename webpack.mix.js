@@ -1,7 +1,11 @@
 const webpack = require('webpack');
 const mix = require('laravel-mix');
+const dotenv = require('dotenv');
 const alfredSpaRoot = process.cwd();
 
+const envConfig = dotenv.config({path: __dirname+'/../../.env'}).parsed;
+const alfredSpaBaseUrl = `${envConfig.APP_URL}/cms`;
+const alfredAPIBaseUrl = `${envConfig.APP_URL}/api/v1`;
 /*
 |--------------------------------------------------------------------------
 | Mix Asset Management
@@ -19,25 +23,30 @@ mix
     resolve: {
       alias: {
         Hehe: path.resolve(__dirname, './resources/'),
-        AlfredSpa: process.cwd()
+        AlfredSpa: process.cwd(),
+        vue$: 'vue/dist/vue.esm.js',
+        '@': path.join(__dirname, '/resources/js'),
       }
     },
     output: {
       publicPath: '/alfred-assets/',
     },
     plugins: [
-      new webpack.DefinePlugin({ "process.env.ALFRED_SPA_ROOT": JSON.stringify(alfredSpaRoot) }),
+      new webpack.DefinePlugin({
+        "process.env.ALFRED_SPA_ROOT": JSON.stringify(alfredSpaRoot),
+        "process.env.ALFRED_API_BASE_URL": JSON.stringify(alfredAPIBaseUrl)
+      }),
     ]
   })
   .setResourceRoot('alfred-assets/')
-  .js('resources/js/main.js', 'js')
+  .js('resources/js/app.js', 'js')
   .extract()
-  /*.sass('resources/sass/app.scss', 'public/css')*/
-  .browserSync('http://alfred2-project.local/cms')
+  .sass('resources/sass/app.scss', 'public/css/app.css', {
+    implementation: require('node-sass'),
+  })
+  .browserSync(alfredSpaBaseUrl)
   .options({
     watchOptions: {
       ignored: /node_modules/
-    },
-    processCssUrls: false
+    }
   });
-

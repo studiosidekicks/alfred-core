@@ -12,11 +12,16 @@
     <!-- Scripts -->
     <script src="{{ asset('alfred-assets/js/manifest.js') }}" defer></script>
     <script src="{{ asset('alfred-assets/js/vendor.js') }}" defer></script>
-    <script src="{{ asset('alfred-assets/js/main.js') }}" defer></script>
+    <script src="{{ asset('alfred-assets/js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="{{ asset('alfred-assets/css/app.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+        html, body {margin:0;padding:0;}
+        body {font-family: 'Roboto', sans-serif;}
+    </style>
 </head>
 <body>
     <div id="app"></div>
