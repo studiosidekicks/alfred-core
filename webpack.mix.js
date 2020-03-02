@@ -52,7 +52,10 @@ mix
   .sass('resources/sass/app.scss', 'css/app.css', {
     implementation: require('node-sass'),
   })
-  .browserSync(alfredSpaBaseUrl)
+  .browserSync({
+    proxy: alfredSpaBaseUrl,
+    open: false
+  })
   .options({
     watchOptions: {
       ignored: /node_modules/
