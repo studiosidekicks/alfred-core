@@ -17,12 +17,49 @@ const alfredAPIBaseUrl = `${envConfig.APP_URL}/api/v1`;
 |
 */
 
+Mix.listen('configReady', config => {
+  const scssRule = config.module.rules.find(r => r.test.toString() === /\.scss$/.toString());
+  const scssOptions = scssRule.loaders.find(l => l.loader === 'sass-loader').options;
+  scssOptions.prependData = '@import "./resources/sass/app.scss";';
+
+  const sassRule = config.module.rules.find(r => r.test.toString() === /\.sass$/.toString());
+  const sassOptions = sassRule.loaders.find(l => l.loader === 'sass-loader').options;
+  sassOptions.prependData = '@import "./resources/sass/app.scss";';
+})
+
 mix
   .setPublicPath('../../public/alfred-assets/')
   .webpackConfig({
+    /*module: {
+      rules: [
+        {
+          test: /\.s(c|a)ss$/,
+          use: [
+            'vue-style-loader',
+            'css-loader',
+            {
+              loader: 'sass-loader',
+              // Requires sass-loader@^7.0.0
+              options: {
+                implementation: require('sass'),
+                fiber: require('fibers'),
+                indentedSyntax: true // optional
+              },
+              // Requires sass-loader@^8.0.0
+              options: {
+                implementation: require('sass'),
+                sassOptions: {
+                  fiber: require('fibers'),
+                  indentedSyntax: true // optional
+                },
+              },
+            },
+          ],
+        }
+      ]
+    },*/
     resolve: {
       alias: {
-        Hehe: path.resolve(__dirname, './resources/'),
         AlfredSpa: process.cwd(),
         vue$: 'vue/dist/vue.esm.js',
         '@': path.join(__dirname, '/resources/js'),
@@ -50,7 +87,11 @@ mix
   .js('resources/js/app.js', 'js')
   .extract()
   .sass('resources/sass/app.scss', 'css/app.css', {
-    implementation: require('node-sass'),
+    implementation: require('sass'),
+    sassOptions: {
+      fiber: require('fibers'),
+      indentedSyntax: true // optional
+    },
   })
   .browserSync({
     proxy: alfredSpaBaseUrl,

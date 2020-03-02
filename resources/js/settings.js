@@ -1,11 +1,8 @@
-import variables from '@/styles/element-variables.scss';
-
 export default {
   /**
    * @type {String}
    */
   title: 'Alfred 2',
-  theme: variables.theme,
 
   /**
    * @type {boolean} true | false

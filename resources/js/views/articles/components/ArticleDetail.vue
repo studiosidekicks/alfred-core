@@ -291,32 +291,3 @@ export default {
   },
 };
 </script>
-
-<style rel="stylesheet/scss" lang="scss" scoped>
-@import "~@/styles/mixin.scss";
-.createPost-container {
-  position: relative;
-  .createPost-main-container {
-    padding: 0 45px 20px 50px;
-    .postInfo-container {
-      position: relative;
-      @include clearfix;
-      margin-bottom: 10px;
-      .postInfo-container-item {
-        float: left;
-      }
-    }
-  }
-  .word-counter {
-    width: 40px;
-    position: absolute;
-    right: -10px;
-    top: 0px;
-  }
-}
-</style>
-<style>
-.createPost-container label.el-form-item__label {
-  text-align: left;
-}
-</style>

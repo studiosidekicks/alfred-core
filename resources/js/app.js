@@ -1,6 +1,7 @@
 import Vue from 'vue';
+import vuetify from './plugins/vuetify';
 import Cookies from 'js-cookie';
-//import ElementUI from 'element-ui';
+
 import App from './views/App';
 import store from './store';
 import router from '@/router';
@@ -8,11 +9,6 @@ import i18n from './lang'; // Internationalization
 import '@/permission'; // permission control
 
 import * as filters from './filters'; // global filters
-
-/*Vue.use(ElementUI, {
-  size: Cookies.get('size') || 'medium', // set element-ui default size
-  i18n: (key, value) => i18n.t(key, value),
-});*/
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {
@@ -22,6 +18,7 @@ Object.keys(filters).forEach(key => {
 Vue.config.productionTip = false;
 
 new Vue({
+  vuetify,
   el: '#app',
   router,
   store,

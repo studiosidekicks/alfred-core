@@ -1,34 +1,45 @@
 <template>
   <div class="login-container">
-    <div class="login-form">
-      <h3>Log in to Alfred</h3>
-    <!--<el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <h3 class="title">
-        Log in to Alfred
-      </h3>
-
-      <el-form-item prop="email">
-        <el-input v-model="loginForm.email" name="email" type="text" auto-complete="on" :placeholder="$t('login.email')" />
-      </el-form-item>
-
-      <el-form-item prop="password">
-        <el-input
-          v-model="loginForm.password"
-          :type="pwdType"
-          name="password"
-          auto-complete="on"
-          placeholder="password"
-          @keyup.enter.native="handleLogin"
-        />
-      </el-form-item>
-
-      <el-form-item>
-        <el-button :loading="loading" type="primary" @click.native.prevent="handleLogin">
-          Log in
-        </el-button>
-      </el-form-item>
-    </el-form>-->
-    </div>
+    <h1>Log in</h1>
+    <v-form 
+      v-model="valid" 
+      ref="loginForm"
+      name="loginForm"
+      @submit.prevent="handleLogin">
+      <v-container>
+        <v-row>
+          <v-text-field
+            v-model="loginForm.email"
+            :rules="loginRules.email"
+            label="Login"
+            outlined
+            required
+          ></v-text-field>
+        </v-row>
+        <v-row>
+          <v-text-field
+            v-model="loginForm.password"
+            :rules="loginRules.password"
+            type="password"
+            label="Password"
+            outlined
+            required
+          ></v-text-field>
+        </v-row>
+        <v-row>
+          <v-btn 
+            type="submit"
+            :disabled="!valid"
+            depressed 
+            block
+            large
+            :loading="loading"
+            color="primary">
+            Log in
+          </v-btn>
+        </v-row>
+      </v-container>
+    </v-form>
   </div>
 </template>
 
@@ -38,32 +49,22 @@ import { validEmail } from '@/utils/validate';
 export default {
   name: 'Login',
   data() {
-    const validateEmail = (rule, value, callback) => {
-      if (!validEmail(value)) {
-        callback(new Error('Please enter the correct email'));
-      } else {
-        callback();
-      }
-    };
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 4) {
-        callback(new Error('Password cannot be less than 4 digits'));
-      } else {
-        callback();
-      }
-    };
     return {
       loginForm: {
         email: '',
         password: '',
       },
       loginRules: {
-        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }],
+        email: [
+          v => !!v || 'Login is required'
+        ],
+        password: [
+          v => !!v || 'Password is required'
+        ],
       },
       loading: false,
-      pwdType: 'password',
       redirect: undefined,
+      valid: false
     };
   },
   watch: {
@@ -76,22 +77,20 @@ export default {
   },
   methods: {
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/' });
-              this.loading = false;
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+      if (this.$refs.loginForm.validate()) {
+        this.loading = true;
+        this.$store.dispatch('user/login', this.loginForm)
+          .then(() => {
+            this.$router.push({ path: this.redirect || '/' });
+            this.loading = false;
+          })
+          .catch(() => {
+            this.loading = false;
+          });
         } else {
           console.log('error submit!!');
           return false;
         }
-      });
     },
   },
 };
@@ -99,10 +98,8 @@ export default {
 
 <style lang="scss" scoped>
 .login-container {
-
-  .login-form {
-    width: 400px;
-    margin: 50px auto;
-  }
+  width: 80%;
+  max-width: 400px;
+  margin: 50px auto;
 }
 </style>

@@ -163,26 +163,3 @@ export default {
   },
 };
 </script>
-
-<style rel="stylesheet/scss" lang="scss" scoped>
-.app-container {
-  /deep/ .permission-alert {
-    width: 600px;
-    margin-top: 15px;
-    background-color: #f0f9eb;
-    color: #67c23a;
-    padding: 8px 16px;
-    border-radius: 4px;
-    display: inline-block;
-  }
-  /deep/ .permission-sourceCode {
-    margin-left: 15px;
-  }
-  /deep/ .permission-tag {
-    background-color: #ecf5ff;
-  }
-  .description {
-    margin-bottom: 15px;
-  }
-}
-</style>
