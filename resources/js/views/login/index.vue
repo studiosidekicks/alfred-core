@@ -44,8 +44,6 @@
 </template>
 
 <script>
-import { validEmail } from '@/utils/validate';
-
 export default {
   name: 'Login',
   data() {
