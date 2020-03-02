@@ -20,12 +20,6 @@ const componentRoutes = {
       meta: { title: 'tinymce' },
     },
     {
-      path: 'json-editor',
-      component: () => import('@/views/components-demo/JsonEditor'),
-      name: 'JsonEditorDemo',
-      meta: { title: 'jsonEditor' },
-    },
-    {
       path: 'splitpane',
       component: () => import('@/views/components-demo/SplitPane'),
       name: 'SplitpaneDemo',

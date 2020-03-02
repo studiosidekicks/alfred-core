@@ -26,7 +26,15 @@ mix
         AlfredSpa: process.cwd(),
         vue$: 'vue/dist/vue.esm.js',
         '@': path.join(__dirname, '/resources/js'),
-      }
+      },
+      extensions: [
+        '.js',
+        '.jsx'
+      ],
+      modules: [
+        path.resolve(__dirname, 'node_modules/'),
+        path.resolve(__dirname, 'resources/')
+      ]
     },
     output: {
       publicPath: '/alfred-assets/',

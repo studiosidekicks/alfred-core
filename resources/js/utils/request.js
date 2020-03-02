@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Message } from 'element-ui';
 import { getToken, setToken } from '@/utils/auth';
 
 // Create axios instance
@@ -43,11 +42,6 @@ service.interceptors.response.use(
       message = error.response.data.error;
     }
 
-    Message({
-      message: message,
-      type: 'error',
-      duration: 5 * 1000,
-    });
     return Promise.reject(error);
   },
 );

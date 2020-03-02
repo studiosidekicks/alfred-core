@@ -13,9 +13,7 @@ Vue.use(Router);
 import Layout from '@/layout';
 
 /* Router for modules */
-import elementUiRoutes from './modules/element-ui';
 import componentRoutes from './modules/components';
-import chartsRoutes from './modules/charts';
 import adminRoutes from './modules/admin';
 import nestedRoutes from './modules/nested';
 import errorRoutes from './modules/error';
@@ -89,14 +87,12 @@ export const constantRoutes = [
         meta: { title: 'dashboard', icon: 'dashboard', noCache: false },
       },
     ],
-  },
-  elementUiRoutes,
+  }
 ];
 
 export const asyncRoutes = [
   permissionRoutes,
   componentRoutes,
-  chartsRoutes,
   nestedRoutes,
   adminRoutes,
 ];

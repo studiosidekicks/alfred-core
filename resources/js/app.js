@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Cookies from 'js-cookie';
-import ElementUI from 'element-ui';
+//import ElementUI from 'element-ui';
 import App from './views/App';
 import store from './store';
 import router from '@/router';
@@ -9,10 +9,10 @@ import '@/permission'; // permission control
 
 import * as filters from './filters'; // global filters
 
-Vue.use(ElementUI, {
+/*Vue.use(ElementUI, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value),
-});
+});*/
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {
@@ -28,3 +28,5 @@ new Vue({
   i18n,
   render: h => h(App),
 });
+
+//import '../../../../Alfred-symlink-test/resources/js/app';
