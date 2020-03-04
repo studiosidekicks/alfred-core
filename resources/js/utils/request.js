@@ -18,8 +18,6 @@ service.interceptors.request.use(
     return config;
   },
   error => {
-    // Do something with request error
-    console.log(error); // for debug
     Promise.reject(error);
   }
 );
@@ -42,7 +40,7 @@ service.interceptors.response.use(
       message = error.response.data.error;
     }
 
-    return Promise.reject(error);
+    return Promise.reject(message);
   },
 );
 
