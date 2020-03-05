@@ -3,13 +3,16 @@
 namespace  Studiosidekicks\Alfred\Providers;
 
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Studiosidekicks\Alfred\Auth\Back\Providers\BackAuthServiceProvider;
 use Studiosidekicks\Alfred\Auth\Front\Facades\FrontAuth;
 use Studiosidekicks\Alfred\Auth\Front\Services\FrontAuthService;
 use Studiosidekicks\Alfred\Core\Providers\AlfredCoreServiceProvider;
+use Studiosidekicks\Alfred\Core\Providers\AlfredCorsServiceProvider;
 use Studiosidekicks\Alfred\Dashboard\Providers\DashboardServiceProvider;
 use Studiosidekicks\Alfred\FileManager\Providers\FileManagerServiceProvider;
+use Studiosidekicks\Alfred\Http\Middleware\AlfredCors;
 use Studiosidekicks\Alfred\Log\Providers\LogServiceProvider;
 
 class AlfredProvider extends ServiceProvider
@@ -17,9 +20,9 @@ class AlfredProvider extends ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function boot()
+    public function boot(Router $router)
     {
-        //
+        $router->aliasMiddleware('cors', AlfredCors::class);
     }
 
     /**
@@ -73,6 +76,7 @@ class AlfredProvider extends ServiceProvider
     private function registerOtherProviders()
     {
         $this->app->register(AlfredCoreServiceProvider::class);
+        $this->app->register(AlfredCorsServiceProvider::class);
 
         $this->app->register(BackAuthServiceProvider::class);
         $this->app->register(FileManagerServiceProvider::class);

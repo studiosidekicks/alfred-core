@@ -150,6 +150,7 @@ class Install extends Command
         $password = BackAuth::createPrimaryAccount($primaryAccountEmail);
 
         if ($password) {
+            $this->alert('Generated password for the user:');
             $this->info($password);
             return;
         }

@@ -18,4 +18,5 @@ return [
     'api' => [
         'version' => 1,
     ],
+    'spa_url' => env('ALFRED_SPA_URL', env('APP_URL')),
 ];
