@@ -14,6 +14,7 @@ use Studiosidekicks\Alfred\Dashboard\Providers\DashboardServiceProvider;
 use Studiosidekicks\Alfred\FileManager\Providers\FileManagerServiceProvider;
 use Studiosidekicks\Alfred\Http\Middleware\AlfredCors;
 use Studiosidekicks\Alfred\Log\Providers\LogServiceProvider;
+use Studiosidekicks\Alfred\User\Providers\UserServiceProvider;
 
 class AlfredProvider extends ServiceProvider
 {
@@ -83,6 +84,8 @@ class AlfredProvider extends ServiceProvider
 
         $this->app->register(DashboardServiceProvider::class);
         $this->app->register(LogServiceProvider::class);
+
+        $this->app->register(UserServiceProvider::class);
     }
 
     private function registerFrontAuth()

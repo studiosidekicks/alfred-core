@@ -144,4 +144,9 @@ class BackAuthService implements BackAuthServiceContract
 
         return $randomString;
     }
+
+    public function user()
+    {
+        return Sentinel::getUser();
+    }
 }
