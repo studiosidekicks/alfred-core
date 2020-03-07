@@ -25,6 +25,11 @@ Route::middleware('back-auth')->group(function () {
 
     });
 
+    Route::prefix('my-account')->namespace('User')->group(function () {
+        Route::get('/', 'MyAccountApiController@getCurrentLoggedUserData');
+        Route::put('/', 'MyAccountApiController@saveCurrentLoggedUserData');
+    });
+
     Route::prefix('file-manager')->namespace('FileManager')->group(function () {
         Route::resource('directories', 'ApiDirectoriesController')->only(['index', 'store', 'update', 'destroy']);
         Route::post('directories/{directory}/move', 'ApiDirectoriesController@move');
