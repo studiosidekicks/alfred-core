@@ -22,6 +22,7 @@ class BackUser extends EloquentUser
      */
     protected $fillable = [
         'first_name', 'last_name', 'email', 'password', 'is_primary',
+        'is_super_admin',
     ];
 
     /**
@@ -34,8 +35,10 @@ class BackUser extends EloquentUser
     ];
 
     protected $casts = [
-        'is_primary' => 'boolean'
+        'is_primary' => 'boolean',
+        'is_super_admin' => 'boolean',
     ];
+
     /**
      * @return int
      */

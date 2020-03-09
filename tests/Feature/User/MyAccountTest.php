@@ -9,6 +9,24 @@ class MyAccountTest extends LoginUserCase
 {
     use RefreshDatabase;
 
+    public function test_user_can_get_me_data()
+    {
+        $this->loginUser();
+
+        $response = $this->json('get','/api/v1/me');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'email',
+                    'first_name',
+                    'last_name',
+                    'is_super_admin',
+                    'permissions',
+                ]
+            ]);
+    }
+
     public function test_user_can_get_my_account_data()
     {
         $this->loginUser();

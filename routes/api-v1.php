@@ -25,9 +25,17 @@ Route::middleware('back-auth')->group(function () {
 
     });
 
-    Route::prefix('my-account')->namespace('User')->group(function () {
+    Route::prefix('me')->namespace('User')->group(function () {
         Route::get('/', 'MyAccountApiController@getCurrentLoggedUserData');
+    });
+
+    Route::prefix('my-account')->namespace('User')->group(function () {
+        Route::get('/', 'MyAccountApiController@getDataForEdit');
         Route::put('/', 'MyAccountApiController@saveCurrentLoggedUserData');
+    });
+
+    Route::prefix('groups')->namespace('Group')->group(function () {
+        Route::resource('/', 'GroupApiController', ['only' => ['index', 'store', 'edit', 'destroy', 'update']])->parameters(['' => 'role']);
     });
 
     Route::prefix('file-manager')->namespace('FileManager')->group(function () {

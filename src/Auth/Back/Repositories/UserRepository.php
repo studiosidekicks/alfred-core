@@ -18,6 +18,11 @@ class UserRepository extends IlluminateUserRepository implements UserRepositoryC
         return $this->model()->orWhere('is_primary', 1)->exists();
     }
 
+    public function getPrimaryAccount()
+    {
+        return $this->model()->orWhere('is_primary', 1)->first(['id']);
+    }
+
     public function findByEmail(string $email)
     {
         return $this->model()->whereEmail($email)->first(['id', 'email']);

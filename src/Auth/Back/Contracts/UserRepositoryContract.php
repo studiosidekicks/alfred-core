@@ -9,4 +9,6 @@ interface UserRepositoryContract
     public function findByEmail(string $email);
 
     public function findById(int $userId);
+
+    public function getPrimaryAccount();
 }

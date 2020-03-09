@@ -138,6 +138,7 @@ class Install extends Command
     {
         $this->info('Creating primary CMS account...');
 
+        BackAuth::createMainAdminGroup();
         list($data, $error) = BackAuth::checkOtherPrimaryAccountExistence();
 
         if ($error || $data['exists']) {

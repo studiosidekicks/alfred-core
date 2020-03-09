@@ -1,12 +1,12 @@
 <?php
 
-namespace Studiosidekicks\Alfred\User\Requests;
+namespace Studiosidekicks\Alfred\Group\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use BackAuth;
 
-class UpdateMyAccountRequest extends FormRequest
+class GroupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,15 +25,9 @@ class UpdateMyAccountRequest extends FormRequest
      */
     public function rules()
     {
-        $user = BackAuth::user();
         return [
-            'email' => [
-                'required',
-                Rule::unique('users')->ignore($user)
-            ],
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'role_id' => 'required',
+            'name' => 'required',
+            'permissions' => 'required|array|nullable'
         ];
     }
 }

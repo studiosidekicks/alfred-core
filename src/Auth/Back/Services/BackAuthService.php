@@ -23,9 +23,25 @@ class BackAuthService implements BackAuthServiceContract
         $this->rolesRepository = $rolesRepository;
     }
 
+    public function createMainAdminGroup()
+    {
+        $this->rolesRepository->firstOrCreate([
+            'name' => 'Admins',
+            'slug' => 'admins'
+        ]);
+    }
+
     public function checkOtherPrimaryAccountExistence()
     {
-        return [['exists' => $this->usersRepository->checkExistenceOfPrimaryAccount()], false];
+        if ($exists = $this->usersRepository->checkExistenceOfPrimaryAccount()) {
+            $primaryAccount = $this->usersRepository->getPrimaryAccount();
+
+            if (!$primaryAccount->roles()->exists()) {
+                $primaryAccount->roles()->attach(1);
+            }
+        }
+
+        return [['exists' => $exists], false];
     }
 
     public function createPrimaryAccount(string $email)
@@ -34,11 +50,16 @@ class BackAuthService implements BackAuthServiceContract
         $data = [
             'email' => $email,
             'password' => $password,
+            'is_super_admin' => true,
         ];
 
         DB::beginTransaction();
 
         try {
+            $createdGroup = $this->rolesRepository->firstOrCreate([
+                'name' => 'Admins'
+            ]);
+
             if ($createdUser = $this->usersRepository->create($data)) {
 
                 $createdUser->update([
@@ -46,6 +67,8 @@ class BackAuthService implements BackAuthServiceContract
                 ]);
 
                 $createdUser->completeActivation();
+
+                $createdGroup->users()->attach($createdUser->id);
             }
 
         } catch (\Exception $exception) {

@@ -14,9 +14,15 @@ class MyAccountApiController extends ApiResponseController
         $this->service = $service;
     }
 
-    public function getCurrentLoggedUserData()
+    public function getDataForEdit()
     {
         list($response, $error) = $this->service->getMyAccountData();
+        return $this->response($response, $error);
+    }
+
+    public function getCurrentLoggedUserData()
+    {
+        list($response, $error) = $this->service->getDataAboutLoggedInUser();
         return $this->response($response, $error);
     }
 
