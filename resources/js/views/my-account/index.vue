@@ -1,5 +1,5 @@
 <template>
   <div>
-    Dashboard is here.
+    My account
   </div>
 </template>

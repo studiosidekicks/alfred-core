@@ -8,9 +8,9 @@ export function login(data) {
   });
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/auth/user',
+    url: '/my-account',
     method: 'get',
   });
 }

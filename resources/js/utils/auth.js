@@ -1,15 +1,7 @@
-import Cookies from 'js-cookie';
-
-const TokenKey = 'Admin-Token';
-
-export function getToken() {
-  return Cookies.get(TokenKey);
+export function getIsUserLoggedIn() {
+  return localStorage.isUserLoggedIn ? JSON.parse(localStorage.isUserLoggedIn) : false;
 }
 
-export function setToken(token) {
-  return Cookies.set(TokenKey, token);
-}
-
-export function removeToken() {
-  return Cookies.remove(TokenKey);
+export function setIsUserLoggedIn(status) {
+  return localStorage.isUserLoggedIn = status;
 }

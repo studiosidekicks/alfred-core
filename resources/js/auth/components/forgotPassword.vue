@@ -1,49 +1,34 @@
 <template>
-  <div class="login">
-    <div class="login__header">
-      <img
-        class="login__logo"
-        src="@/assets/logo.svg" 
-        width="100" 
-        alt="Alfred">
-
-      <h1 class="login__headline display-1">Log in</h1>
-    </div>
+  <div>
+    <h1 class="display-1">Forgot password?</h1>
 
     <validation-errors v-if="validationErrors" :errors="validationErrors"></validation-errors>
 
     <v-form 
       v-model="valid" 
-      ref="loginForm"
-      name="loginForm"
-      @submit.prevent="handleLogin">
+      ref="forgotPasswordForm"
+      name="forgotPasswordForm"
+      @submit.prevent="handleForm">
 
       <v-row no-gutters>
         <v-text-field
-          v-model="loginForm.email"
-          :rules="loginRules.email"
+          v-model="forgotPasswordForm.email"
+          :rules="forgotPasswordRules.email"
           label="Login"
           outlined
           required
         ></v-text-field>
       </v-row>
-      
-      <v-row no-gutters>
-        <v-text-field
-          v-model="loginForm.password"
-          :rules="loginRules.password"
-          type="password"
-          label="Password"
-          outlined
-          required
-        ></v-text-field>
-      </v-row>
 
-      <v-row class="login__footer" no-gutters align="center">
+      <v-row class="login-footer" no-gutters align="center">
         <v-col
           sm="12"
           md="6">
-          <a href="">Forgot password?</a>
+          <router-link 
+            class="layout-auth-footer-link" 
+            :to="{name: 'auth.login'}">
+            Log in
+          </router-link>
         </v-col>
         <v-col
           class="text-right"
@@ -56,7 +41,7 @@
             large
             :loading="loading"
             color="primary">
-            Log in
+            Submit
           </v-btn>
         </v-col>
       </v-row>
@@ -72,20 +57,19 @@ export default {
   components: {
     ValidationErrors
   },
-  name: 'Login',
+  name: 'ForgotPassword',
+  props: {
+    message: null
+  },
   data() {
     return {
-      loginForm: {
-        email: '',
-        password: ''
+      forgotPasswordForm: {
+        email: ''
       },
-      loginRules: {
+      forgotPasswordRules: {
         email: [
           v => !!v || 'Login is required'
-        ],
-        password: [
-          v => !!v || 'Password is required'
-        ],
+        ]
       },
       loading: false,
       redirect: undefined,
@@ -102,11 +86,12 @@ export default {
     },
   },
   methods: {
-    handleLogin() {
-      if (this.$refs.loginForm.validate()) {
+    handleForm() {
+      if (this.$refs.forgotPasswordForm.validate()) {
         this.validationErrors = null;
         this.loading = true;
 
+        /*
         this.$store.dispatch('user/login', this.loginForm)
           .then(() => {
             this.$router.push({ path: this.redirect || '/' });
@@ -118,39 +103,9 @@ export default {
         } else {
           console.log('error submit!!');
           return false;
-        }
-    },
-  },
-};
-</script>
-
-<style lang="scss" scoped>
-.login {
-  width: 80%;
-  max-width: 400px;
-  padding: 2em;
-  margin: 50px auto;
-  border: 1px solid #ededed;
-  border-radius: 4px;
-
-  &__header {
-    text-align: center;
-  }
-
-  &__headline {
-    font-weight: 600;
-    margin-bottom: 0.5em;
-  }
-
-  &__logo {
-    margin-bottom: 1.5em;
-  }
-
-  &__footer {
-    a {
-      font-size: 14px;
-      text-decoration: none;
+        }*/
+      }
     }
   }
-}
-</style>
+};
+</script>

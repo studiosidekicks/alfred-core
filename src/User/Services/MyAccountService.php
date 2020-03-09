@@ -13,6 +13,10 @@ class MyAccountService implements MyAccountServiceContract
         $user = BackAuth::user();
 
         $userData = $user->only(['email', 'first_name', 'last_name']);
+        
+        // tmp
+        $userData['roles'] = ['superadmin'];
+        $userData['permissions'] = ['pages.index', 'pages.update', 'pages.publish'];
 
         return [[
             'data' => $userData,

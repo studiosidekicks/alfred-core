@@ -1,13 +1,23 @@
 <template>
-  <div v-if="!item.hidden&&item.children" class="menu-wrapper">
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
-      <app-link :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.icon||item.meta.icon" :title="generateTitle(onlyOneChild.meta.title)" />
-        </el-menu-item>
-      </app-link>
-    </template>
+  <div 
+    class="sidebar-item"
+    v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+    <v-list-item-icon>
+      <v-icon>{{ onlyOneChild.meta.icon||item.meta.icon }}</v-icon>
+    </v-list-item-icon>
 
+    <v-list-item-content>
+      <v-list-item-title>{{onlyOneChild.meta.title}}</v-list-item-title>
+    </v-list-item-content>
+  </div>
+
+  <div
+    v-else
+    :index="resolvePath(item.path)">
+    jo
+  </div>
+
+    <!--
     <el-submenu v-else :index="resolvePath(item.path)">
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta.icon" :title="generateTitle(item.meta.title)" />
@@ -28,8 +38,7 @@
           </el-menu-item>
         </app-link>
       </template>
-    </el-submenu>
-  </div>
+    </el-submenu>-->
 </template>
 
 <script>
@@ -105,3 +114,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .sidebar-item {
+    display: flex;
+    width: 100%;
+  }
+</style>

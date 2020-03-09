@@ -9,14 +9,14 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-/* Layout */
+/* Layouts */
+import AuthLayout from '@/auth/layout';
 import Layout from '@/layout';
 
 /* Router for modules */
 import componentRoutes from './modules/components';
 import adminRoutes from './modules/admin';
 import nestedRoutes from './modules/nested';
-import errorRoutes from './modules/error';
 import permissionRoutes from './modules/permission';
 
 /**
@@ -55,46 +55,85 @@ export const constantRoutes = [
     ],
   },
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
+    path: '/auth/login',
+    component: AuthLayout,
     hidden: true,
+    children: [
+      {
+        path: '',
+        component: () => import('@/auth/components/login'),
+        name: 'auth.login',
+        meta: { title: 'Log in', noCache: true },
+        props: true
+      }
+    ],
   },
   {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/AuthRedirect'),
+    path: '/auth/logout',
+    component: AuthLayout,
     hidden: true,
+    children: [
+      {
+        path: '',
+        component: () => import('@/auth/components/logout'),
+        name: 'auth.logout',
+        meta: { title: 'Log out', noCache: true },
+      }
+    ],
   },
   {
-    path: '/404',
-    redirect: { name: 'Page404' },
-    component: () => import('@/views/error-page/404'),
+    path: '/auth/forgot-password',
+    component: AuthLayout,
     hidden: true,
-  },
-  {
-    path: '/401',
-    component: () => import('@/views/error-page/401'),
-    hidden: true,
+    children: [
+      {
+        path: '',
+        component: () => import('@/auth/components/forgotPassword'),
+        name: 'auth.forgot-password',
+        meta: { title: 'Forgot password?', noCache: true },
+      }
+    ],
   },
   {
     path: '',
     component: Layout,
     redirect: 'dashboard',
+    hidden: true
+  },
+  {
+    path: '/dashboard',
+    component: Layout,
     children: [
       {
-        path: 'dashboard',
+        path: '',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', noCache: false },
-      },
+        meta: { 
+          title: 'Dashboard', 
+          icon: 'mdi-view-dashboard'
+        },
+      }
     ],
-  }
+  },
+  {
+    path: '/my-account',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/my-account/index'),
+        name: 'MyAccount',
+        meta: { 
+          title: 'My Account', 
+          icon: 'mdi-antenna'
+        },
+      }
+    ],
+  },
 ];
 
 export const asyncRoutes = [
-  permissionRoutes,
-  componentRoutes,
-  nestedRoutes,
-  adminRoutes,
+  
 ];
 
 const createRouter = () => new Router({
