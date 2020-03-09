@@ -45,6 +45,7 @@ class MyAccountTest extends LoginUserCase
             'email' => 'test2@example.com',
             'first_name' => 'Test',
             'last_name' => 'Account',
+            'role_id' => 1,
         ]);
 
         $response->assertStatus(200);

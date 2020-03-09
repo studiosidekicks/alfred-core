@@ -11,7 +11,12 @@ class GroupTest extends LoginUserCase
 
     public function test_user_can_get_groups_list()
     {
-        $this->assertTrue(true);
+        $this->loginUser();
+
+        $response = $this->json('get','/api/v1/groups');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['list']);
     }
 
     public function test_user_can_create_a_group()
