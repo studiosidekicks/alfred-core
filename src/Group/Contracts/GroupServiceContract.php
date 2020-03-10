@@ -14,4 +14,6 @@ interface GroupServiceContract
     public function updateGroup(Role $role, Request $request);
 
     public function deleteGroup(Role $role);
+
+    public function getGroupData(Role $role);
 }

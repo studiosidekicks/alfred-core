@@ -40,6 +40,17 @@ class GroupService implements GroupServiceContract
         return ['Group could not be updated.', true];
     }
 
+    public function getGroupData(Role $role)
+    {
+        $roleData = $role->only('name');
+        $roleData['permissions'] = $role->getPermissions();
+
+        return [
+            ['data' => $roleData, 'available_permissions' => []],
+            false
+        ];
+    }
+
     public function deleteGroup(Role $role)
     {
         if ($role->users()->exists()) {

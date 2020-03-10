@@ -34,6 +34,12 @@ class GroupApiController extends ApiResponseController
         return $this->response($response, $error);
     }
 
+    public function edit(Role $role)
+    {
+        list($response, $error) = $this->service->getGroupData($role);
+        return $this->response($response, $error);
+    }
+
     public function destroy(Role $role)
     {
         list($response, $error) = $this->service->deleteGroup($role);

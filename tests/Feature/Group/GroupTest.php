@@ -32,6 +32,15 @@ class GroupTest extends LoginUserCase
             ]);
     }
 
+    public function test_user_can_get_group_data_info()
+    {
+        $this->loginUser();
+
+        $response = $this->json('get','/api/v1/groups/1/edit');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['data', 'available_permissions']);
+    }
 
     public function test_user_can_create_a_group()
     {
