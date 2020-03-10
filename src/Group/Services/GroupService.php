@@ -33,7 +33,7 @@ class GroupService implements GroupServiceContract
 
     public function updateGroup(Role $role, Request $request)
     {
-        if ($role->update($request->only(['data', 'permissions']))) {
+        if ($role->update($request->only(['name', 'permissions']))) {
             return ['Group updated successfully.', false];
         }
 
@@ -42,6 +42,10 @@ class GroupService implements GroupServiceContract
 
     public function deleteGroup(Role $role)
     {
+        if ($role->users()->exists()) {
+            return ['Group cannot have assigned users if you want to remove it.', true];
+        }
+
         if ($role->delete()) {
             return ['Group has been removed.', false];
         }
