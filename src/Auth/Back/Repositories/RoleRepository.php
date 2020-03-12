@@ -15,7 +15,7 @@ class RoleRepository extends IlluminateRoleRepository implements RoleRepositoryC
         $this->queryModel = app()->make($model);
     }
 
-    public function get($columns = ['*'])
+    public function get(array $columns = ['*'])
     {
         return $this->queryModel->get($columns);
     }
