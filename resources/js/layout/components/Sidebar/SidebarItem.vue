@@ -1,70 +1,58 @@
 <template>
-  <div 
+  <v-list-item 
     class="sidebar-item"
-    v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+    v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow"
+    link
+    :to="item.path"
+    @click="menuItemClick(onlyOneChild)"
+    >
     <v-list-item-icon>
-      <v-icon>{{ onlyOneChild.meta.icon||item.meta.icon }}</v-icon>
+      <v-icon>{{ onlyOneChild.meta.icon || item.meta.icon }}</v-icon>
     </v-list-item-icon>
 
-    <v-list-item-content>
-      <v-list-item-title>{{onlyOneChild.meta.title}}</v-list-item-title>
-    </v-list-item-content>
-  </div>
+    <v-list-item-title>{{onlyOneChild.meta.title}}</v-list-item-title>
+  </v-list-item>
 
-  <div
-    v-else
-    :index="resolvePath(item.path)">
-    jo
-  </div>
-
-    <!--
-    <el-submenu v-else :index="resolvePath(item.path)">
-      <template slot="title">
-        <item v-if="item.meta" :icon="item.meta.icon" :title="generateTitle(item.meta.title)" />
+  <div v-else>
+    <v-list-group
+      v-for="item in item.children"
+      :key="item.path"
+      :prepend-icon="item.meta.icon"
+      link
+      :value="isMenuItemActive(item)">
+      <template v-slot:activator>
+        <v-list-item-title>{{ item.meta.title }}</v-list-item-title>
       </template>
 
-      <template v-for="child in visibleChildren">
-        <sidebar-item
-          v-if="child.children&&child.children.length>0"
-          :key="child.path"
-          :is-nest="true"
-          :item="child"
-          :base-path="resolvePath(child.path)"
-          class="nest-menu"
-        />
-        <app-link v-else :key="child.name" :to="resolvePath(child.path)">
-          <el-menu-item :index="resolvePath(child.path)">
-            <item v-if="child.meta" :icon="child.meta.icon" :title="generateTitle(child.meta.title)" />
-          </el-menu-item>
-        </app-link>
-      </template>
-    </el-submenu>-->
+      <v-list-item
+        class="sidebar-item-child"
+        v-for="(child, i) in item.children"
+        :key="i"
+        link
+        :to="child.path"
+        @click="menuItemClick(child)"
+        >
+        <v-list-item-icon>
+          <v-icon>{{ child.meta.icon }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-title>{{ child.meta.title }}</v-list-item-title>
+      </v-list-item>
+    </v-list-group>
+  </div>
 </template>
 
 <script>
-import path from 'path';
-import { isExternal } from '@/utils/validate';
-import Item from './Item';
-import AppLink from './Link';
-import { generateTitle } from '@/utils/i18n';
+import { mapState } from 'vuex';
 
 export default {
   name: 'SidebarItem',
-  components: { Item, AppLink },
   props: {
     // route object
     item: {
       type: Object,
       required: true,
-    },
-    isNest: {
-      type: Boolean,
-      default: false,
-    },
-    basePath: {
-      type: String,
-      default: '',
-    },
+    }
   },
   data() {
     return {
@@ -72,11 +60,16 @@ export default {
     };
   },
   computed: {
-    visibleChildren() {
-      return this.item.children.filter(item => !item.hidden);
-    },
+    ...mapState({
+      sidebar: state => state.app.sidebar
+    })
   },
   methods: {
+    menuItemClick(menuItem) {
+      if (this.$route.matched[0]) {
+        this.$store.dispatch('app/setActiveMenuItemPath', {path: this.$route.matched[0].path});
+      }
+    },
     hasOneShowingChild(children, parent) {
       const showingChildren = children.filter(item => {
         if (item.hidden) {
@@ -101,23 +94,24 @@ export default {
 
       return false;
     },
-    resolvePath(routePath) {
-      if (this.isExternalLink(routePath)) {
-        return routePath;
-      }
-      return path.resolve(this.basePath, routePath);
-    },
-    isExternalLink(routePath) {
-      return isExternal(routePath);
-    },
-    generateTitle,
+    isMenuItemActive(item) {
+      return this.sidebar.activeMenuItemPath === item.path ? true : undefined;
+    }
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .sidebar-item {
     display: flex;
     width: 100%;
+
+    &-child {
+      margin-left: 10px;
+    }
+  }
+
+  .v-list-group__items > *:last-child {
+    margin-bottom: 1em;
   }
 </style>

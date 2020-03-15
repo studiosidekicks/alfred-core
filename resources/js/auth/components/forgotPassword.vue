@@ -2,6 +2,8 @@
   <div>
     <h1 class="display-1">Forgot password?</h1>
 
+    <v-alert type="success" v-if="message">{{message}}</v-alert>
+
     <validation-errors v-if="validationErrors" :errors="validationErrors"></validation-errors>
 
     <v-form 
@@ -45,7 +47,6 @@
           </v-btn>
         </v-col>
       </v-row>
-
     </v-form>
   </div>
 </template>
@@ -58,11 +59,9 @@ export default {
     ValidationErrors
   },
   name: 'ForgotPassword',
-  props: {
-    message: null
-  },
   data() {
     return {
+      message: '',
       forgotPasswordForm: {
         email: ''
       },
@@ -72,18 +71,9 @@ export default {
         ]
       },
       loading: false,
-      redirect: undefined,
       valid: false,
       validationErrors: null
     };
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect;
-      },
-      immediate: true,
-    },
   },
   methods: {
     handleForm() {
@@ -91,19 +81,16 @@ export default {
         this.validationErrors = null;
         this.loading = true;
 
-        /*
-        this.$store.dispatch('user/login', this.loginForm)
-          .then(() => {
-            this.$router.push({ path: this.redirect || '/' });
+        this.$store.dispatch('user/forgotPassword', this.forgotPasswordForm)
+          .then(response => {
+            this.message = response.message;
           })
           .catch(response => {
             this.validationErrors = response;
           })
           .finally(() => this.loading = false);
-        } else {
-          console.log('error submit!!');
-          return false;
-        }*/
+      } else {
+        return false;
       }
     }
   }

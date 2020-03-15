@@ -12,18 +12,15 @@
       dense
       nav
     >
-      <v-list-item
+      <div
         v-for="route in routes"
         :key="route.path"
-        link
-        :to="route.path"
       >
-      <sidebar-item
-        :key="route.path" 
-        :item="route" 
-        :base-path="route.path" />
-
-      </v-list-item>
+        <sidebar-item
+          :key="route.path" 
+          :item="route">
+        </sidebar-item>
+      </div>
     </v-list>
 
   </div>
@@ -37,13 +34,17 @@ export default {
   components: { SidebarItem },
   computed: {
     ...mapGetters([
-      'sidebar',
-      'permission_routers',
+      'sidebar'
     ]),
     routes() {
       return this.$store.state.permission.routes.filter(route => !route.hidden && route.children);
     }
   },
+  created() {
+    if (this.$route.matched[0]) {
+      this.$store.dispatch('app/setActiveMenuItemPath', { path: this.$route.matched[0].path });
+    }
+  }
 };
 </script>
 

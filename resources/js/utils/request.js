@@ -34,7 +34,6 @@ const service = axios.create({
 service.interceptors.request.use(
   config => config,
   error => {
-    console.log('helloooo ERROR', error);
     Promise.reject(error);
   }
 );
@@ -53,7 +52,6 @@ service.interceptors.response.use(
       message = error.response.data.message;
     }
 
-    console.log('hello ERROR2', message);
     return Promise.reject(message);
   },
 );

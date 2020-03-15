@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/auth';
+import { login, forgotPassword, logout, getInfo } from '@/api/auth';
 import { getIsUserLoggedIn, setIsUserLoggedIn } from '@/utils/auth';
 import router, { resetRouter } from '@/router';
 import store from '@/store';
@@ -6,7 +6,7 @@ import store from '@/store';
 const state = {
   isUserLoggedIn: getIsUserLoggedIn(),
   userInfo: null,
-  roles: [],
+  isUserSuperAdmin: false,
   permissions: [],
 };
 
@@ -17,8 +17,8 @@ const mutations = {
   SET_USER_INFO: (state, userInfo) => {
     state.userInfo = userInfo;
   },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles;
+  SET_IS_SUPER_ADMIN: (state, status) => {
+    state.isUserSuperAdmin = status;
   },
   SET_PERMISSIONS: (state, permissions) => {
     state.permissions = permissions;
@@ -42,6 +42,20 @@ const actions = {
     });
   },
 
+  // forgotten password reminder
+  forgotPassword({ commit }, userInfo) {
+    const { email } = userInfo;
+    return new Promise((resolve, reject) => {
+      forgotPassword({ email: email.trim() })
+        .then(response => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -53,15 +67,13 @@ const actions = {
             reject('Verification failed, please log in again.');
           }
 
-          const { roles, permissions } = data;
-
-          if (!roles || roles.length <= 0) {
-            reject('getInfo: roles must be not empty array!');
-          }
+          const isUserSuperAdmin = data.is_super_admin;
+          const permissions = data.permissions;
 
           commit('SET_USER_INFO', data);
-          commit('SET_ROLES', roles);
           commit('SET_PERMISSIONS', permissions);
+          commit('SET_IS_SUPER_ADMIN', isUserSuperAdmin);
+
           resolve(data);
         })
         .catch(error => {
@@ -82,33 +94,14 @@ const actions = {
         })
         .finally(() => {
           commit('SET_IS_USER_LOGGED_IN', false);
-          commit('SET_ROLES', []);
+          commit('SET_PERMISSIONS', []);
+          commit('SET_IS_SUPER_ADMIN', false);
+          
           setIsUserLoggedIn(false);
           resetRouter();
         });
     });
-  },
-
-  // Dynamically modify permissions
-  changeRoles({ commit, dispatch }, role) {
-    return new Promise(async resolve => {
-      // const { roles } = await dispatch('getInfo');
-
-      const roles = [role.name];
-      const permissions = role.permissions.map(permission => permission.name);
-      commit('SET_ROLES', roles);
-      commit('SET_PERMISSIONS', permissions);
-      resetRouter();
-
-      // generate accessible routes map based on roles
-      const accessRoutes = await store.dispatch('permission/generateRoutes', { roles, permissions });
-
-      // dynamically add accessible routes
-      router.addRoutes(accessRoutes);
-
-      resolve();
-    });
-  },
+  }
 };
 
 export default {

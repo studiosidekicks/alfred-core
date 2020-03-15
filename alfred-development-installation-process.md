@@ -1,7 +1,8 @@
 Alfred Development - installation and process:
-1. Install Laravel [or clone alfred-development-platform.git --> SOON]
+1. Install Laravel 6 [or clone alfred-development-platform.git --> SOON]
 2. Create folder Alfred (in the project root) and specific folder structure, see below:
 ./cms-backend/
+    (here install Laravel)
     Alfred/
         Core/ (clone the alfred-core.git repository here) [submodule in alfred-development-platform.git SOON]
         Modules/

@@ -2,7 +2,7 @@ import router from './router';
 import store from './store';
 import NProgress from 'nprogress'; // progress bar
 import 'nprogress/nprogress.css'; // progress bar style
-import { getIsUserLoggedIn } from '@/utils/auth'; // get token from cookie
+import { getIsUserLoggedIn } from '@/utils/auth';
 import getPageTitle from '@/utils/get-page-title';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
@@ -23,48 +23,30 @@ router.beforeEach(async(to, from, next) => {
   const isUserLoggedIn = getIsUserLoggedIn();
 
   if (isUserLoggedIn) {
-    console.log({isUserLoggedIn});
-
     if (to.path === '/auth/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' });
       NProgress.done();
-    } else {
-      // determine whether the user has obtained his permission roles through getInfo
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0;
 
-      if (hasRoles) {
-        console.log(23);
+    } else {
+      // determine whether the user has obtained his permissions through getInfo
+      const hasPermissions = store.getters.permissions && store.getters.permissions.length > 0;
+
+      if (hasPermissions) {
         next();
+        
       } else {
         try {
-          // get user info
-          // note: roles must be a object array! such as: ['admin'] or ,['manager','editor']
+          const { permissions } = await store.dispatch('user/getInfo');
 
-          console.log('success!');
-
-          const { roles, permissions } = await store.dispatch('user/getInfo');
-
-          console.log({roles}, {permissions});
-
-          // generate accessible routes map based on roles
-          // const accessRoutes = await store.dispatch('permission/generateRoutes', roles, permissions);
-          store.dispatch('permission/generateRoutes', { roles, permissions }).then(response => {
-            // dynamically add accessible routes
-
-            console.log(3424, response);
-            
+          // generate accessible routes map based on permissions
+          store.dispatch('permission/generateRoutes', { permissions }).then(response => {
             router.addRoutes(response);
-
-            // hack method to ensure that addRoutes is complete
-            // set the replace: true, so the navigation will not leave a history record
             next({ ...to });
           });
+
         } catch (error) {
-          console.log(234234, error);
-          // remove token and go to login page to re-login
           await store.dispatch('user/logout');
-          //Message.error(error || 'Has Error');
           next(`/auth/login?redirect=${to.path}`);
           NProgress.done();
         }
@@ -72,8 +54,6 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     /* user is not logged in */
-
-    console.log(23424, to.matched[0]);
 
     if (whiteList.indexOf(to.matched[0] ? to.matched[0].path : '') !== -1) {
       // in the free login whitelist, go directly

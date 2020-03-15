@@ -1,9 +1,7 @@
 <template>
   <div class="app-main">
     <transition name="fade-transform" mode="out-in">
-      <keep-alive>
-        <router-view :key="key" />
-      </keep-alive>
+      <router-view :key="key" />
     </transition>
   </div>
 </template>
@@ -21,6 +19,6 @@ export default {
 
 <style lang="scss">
   .app-main {
-    padding: 1em;
+    padding: 2em;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <v-navigation-drawer app>
       <sidebar />
     </v-navigation-drawer>

@@ -58,7 +58,6 @@
           </v-btn>
         </v-col>
       </v-row>
-
     </v-form>
   </div>
 </template>
@@ -110,18 +109,17 @@ export default {
 
         this.$store.dispatch('user/login', this.loginForm)
           .then(() => {
-            console.log(5324234, { path: this.redirect || '/dashboard' });
             this.$router.push({ path: this.redirect || '/dashboard' }).catch(e => {});
           })
           .catch(response => {
             this.validationErrors = response;
           })
           .finally(() => this.loading = false);
+
         } else {
-          console.log('error submit!!');
           return false;
         }
-    },
-  },
+    }
+  }
 };
 </script>

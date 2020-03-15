@@ -21,3 +21,11 @@ export function logout() {
     method: 'post',
   });
 }
+
+export function forgotPassword(data) {
+  return request({
+    url: '/auth/password/reminder',
+    method: 'post',
+    data: data,
+  });
+}
