@@ -37,7 +37,7 @@ class MyAccountService implements MyAccountServiceContract
         $user = BackAuth::user();
 
         $userData = $user->only(['email', 'first_name', 'last_name']);
-        $userData['role_id'] = $user->roles()->first(['roles.id'])->role_id;
+        $userData['role_id'] = $user->roles()->first(['roles.id'])->id;
 
         return [[
             'data' => $userData,
