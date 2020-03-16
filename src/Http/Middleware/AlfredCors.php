@@ -3,13 +3,16 @@
 namespace Studiosidekicks\Alfred\Http\Middleware;
 
 use Closure;
-use Fruitcake\Cors\HandleCors;
 
-class AlfredCors extends HandleCors
+class AlfredCors
 {
     public function handle($request, Closure $next)
     {
-        return parent::handle($request, $next);
+        $config = config('studiosidekicks.cors');
+
+        return $next($request)
+            ->header('Access-Control-Allow-Origin', $config['allowed_origins'])
+            ->header('Access-Control-Allow-Methods', $config['allowed_methods']);
     }
 
 }

@@ -14,7 +14,6 @@
     ],
     "require": {
         "php": "^7.2",
-        "barryvdh/laravel-cors": "^1.0",
         "cartalyst/sentinel": "^3.0",
         "doctrine/dbal": "^2.10",
         "laravel/framework": "^6.0",
@@ -46,9 +45,7 @@
                 "Error": "Studiosidekicks\\Alfred\\Log\\Facades\\Error",
                 "Signing": "Studiosidekicks\\Alfred\\Log\\Facades\\Signing"
             },
-            "dont-discover": [
-                "barryvdh/laravel-cors"
-            ]
+            "dont-discover": []
         }
     },
     "minimum-stability": "dev",
