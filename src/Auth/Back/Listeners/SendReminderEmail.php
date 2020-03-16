@@ -28,7 +28,7 @@ class SendReminderEmail
     {
         $reminderUrl = url('cms/reset/' . $event->reminder->code . '/' . $event->user->id);
 
-        $message = (new PasswordReset($reminderUrl))->onQueue('emails');
+        $message = (new PasswordReset($reminderUrl));
 
         Mail::to($event->user->email)->queue($message);
     }

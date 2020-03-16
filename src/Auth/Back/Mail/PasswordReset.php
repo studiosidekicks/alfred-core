@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 
 class PasswordReset extends Mailable implements ShouldQueue
 {
+    public $queue = 'emails';
     public $url;
 
     /**
