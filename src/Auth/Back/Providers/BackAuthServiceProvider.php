@@ -6,12 +6,14 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Studiosidekicks\Alfred\Auth\Back\Entities\BackUser;
 use Studiosidekicks\Alfred\Auth\Back\Facades\BackAuth;
+use Studiosidekicks\Alfred\Auth\Back\Facades\RoleAccessor;
 use Studiosidekicks\Alfred\Auth\Back\Middleware\BackAuthMiddleware;
 use Studiosidekicks\Alfred\Auth\Back\Middleware\BackNoAuthMiddleware;
 use Studiosidekicks\Alfred\Auth\Back\Observers\BackUserObserver;
 use Studiosidekicks\Alfred\Auth\Back\Repositories\RoleRepository;
 use Studiosidekicks\Alfred\Auth\Back\Repositories\UserRepository;
 use Studiosidekicks\Alfred\Auth\Back\Services\BackAuthService;
+use Studiosidekicks\Alfred\Auth\Back\Services\RoleService;
 
 class BackAuthServiceProvider extends ServiceProvider
 {
@@ -60,7 +62,14 @@ class BackAuthServiceProvider extends ServiceProvider
                 );
             });
 
+            $this->app->singleton('studiosidekicks.alfred.role_accessor', function ($app) {
+                return new RoleService(
+                    $app['studiosidekicks.alfred.back_auth.roles']
+                );
+            });
+
             $this->app->alias('BackAuth', BackAuth::class);
+            $this->app->alias('RoleAccessor', RoleAccessor::class);
         }
     }
 

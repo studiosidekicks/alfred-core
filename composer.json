@@ -41,6 +41,7 @@
             ],
             "aliases": {
                 "BackAuth": "Studiosidekicks\\Alfred\\Auth\\Back\\Facades\\BackAuth",
+                "RoleAccessor": "Studiosidekicks\\Alfred\\Auth\\Back\\Facades\\RoleAccessor",
                 "Operation": "Studiosidekicks\\Alfred\\Log\\Facades\\Operation",
                 "Error": "Studiosidekicks\\Alfred\\Log\\Facades\\Error",
                 "Signing": "Studiosidekicks\\Alfred\\Log\\Facades\\Signing"

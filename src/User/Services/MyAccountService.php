@@ -5,6 +5,7 @@ namespace Studiosidekicks\Alfred\User\Services;
 use Illuminate\Http\Request;
 use Studiosidekicks\Alfred\User\Contracts\MyAccountServiceContract;
 use BackAuth;
+use RoleAccessor;
 
 class MyAccountService implements MyAccountServiceContract
 {
@@ -39,8 +40,15 @@ class MyAccountService implements MyAccountServiceContract
         $userData = $user->only(['email', 'first_name', 'last_name']);
         $userData['role_id'] = $user->roles()->first(['roles.id'])->id;
 
+        list($allRoles, $error) = RoleAccessor::get(['id', 'name']);
+
+        if ($error) {
+            $allRoles = [];
+        }
+
         return [[
             'data' => $userData,
+            'groups' => !empty($allRoles['list']) ? $allRoles['list'] : $allRoles,
         ], false];
     }
 
