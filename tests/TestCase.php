@@ -45,6 +45,7 @@ abstract class TestCase extends OrchestraTestCase
     {
         return [
             'BackAuth' => 'Studiosidekicks\Alfred\Auth\Back\Facades\BackAuth',
+            'RoleAccessor' => 'Studiosidekicks\Alfred\Auth\Back\Facades\RoleAccessor',
             'Activation' => Activation::class,
             'Reminder' => Reminder::class,
             'Sentinel' => Sentinel::class,

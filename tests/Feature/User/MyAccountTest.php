@@ -34,6 +34,7 @@ class MyAccountTest extends LoginUserCase
         $response = $this->json('get','/api/v1/my-account');
 
         $response->assertStatus(200)
+            ->assertJsonStructure(['data', 'groups'])
             ->assertJsonFragment(['email' => 'test@example.com']);
     }
 
