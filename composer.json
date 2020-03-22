@@ -1,5 +1,5 @@
 {
-    "name": "studiosidekicks/alfred",
+    "name": "studiosidekicks/alfred-core",
     "type": "library",
     "description": "Content Management System with support for Multi-Language Website",
     "keywords": [],
@@ -10,6 +10,11 @@
             "name": "Monika Bernaś",
             "email": "monika@biggerpicture.agency",
             "role": "Back-End Developer"
+        },
+        {
+            "name": "Bartek Miś",
+            "email": "yo@bartekmis.com",
+            "role": "Web Developer"
         }
     ],
     "require": {

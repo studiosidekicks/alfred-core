@@ -1,11 +1,10 @@
 const webpack = require('webpack');
 const mix = require('laravel-mix');
 const dotenv = require('dotenv');
-const alfredSpaRoot = process.cwd();
 
-const envConfig = dotenv.config({path: __dirname+'/../../.env'}).parsed;
-const alfredSpaBaseUrl = `${envConfig.APP_URL}/cms`;
-const alfredAPIBaseUrl = `${envConfig.APP_URL}/api/v1`;
+const envDockerConfig = dotenv.config({path: __dirname+'/../../../.env'}).parsed;
+const envBackendConfig = dotenv.config({path: __dirname+'/../../.env'}).parsed;
+
 /*
 |--------------------------------------------------------------------------
 | Mix Asset Management
@@ -30,34 +29,6 @@ Mix.listen('configReady', config => {
 mix
   .setPublicPath('../../public/alfred-assets/')
   .webpackConfig({
-    /*module: {
-      rules: [
-        {
-          test: /\.s(c|a)ss$/,
-          use: [
-            'vue-style-loader',
-            'css-loader',
-            {
-              loader: 'sass-loader',
-              // Requires sass-loader@^7.0.0
-              options: {
-                implementation: require('sass'),
-                fiber: require('fibers'),
-                indentedSyntax: true // optional
-              },
-              // Requires sass-loader@^8.0.0
-              options: {
-                implementation: require('sass'),
-                sassOptions: {
-                  fiber: require('fibers'),
-                  indentedSyntax: true // optional
-                },
-              },
-            },
-          ],
-        }
-      ]
-    },*/
     resolve: {
       alias: {
         AlfredSpa: process.cwd(),
@@ -78,8 +49,7 @@ mix
     },
     plugins: [
       new webpack.DefinePlugin({
-        "process.env.ALFRED_SPA_ROOT": JSON.stringify(alfredSpaRoot),
-        "process.env.ALFRED_API_BASE_URL": JSON.stringify(alfredAPIBaseUrl)
+        "process.env.ALFRED_API_BASE_URL": JSON.stringify('/api/v1')
       }),
     ]
   })
@@ -94,7 +64,7 @@ mix
     },
   })
   .browserSync({
-    proxy: alfredSpaBaseUrl,
+    proxy: envDockerConfig && envDockerConfig.PROJECT_NAME ? `${envDockerConfig.PROJECT_NAME}_backend:${envDockerConfig.BACKEND_PORT}` : envBackendConfig.APP_URL,
     open: false
   })
   .options({
