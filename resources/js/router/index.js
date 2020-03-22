@@ -15,11 +15,13 @@ import Layout from '@/layout';
 /* Router for modules */
 import authRoutes from './modules/auth';
 import dashboardRoutes from './modules/dashboard';
+import myAccountRoutes from './modules/myAccount';
 import adminToolsRoutes from './modules/adminTools';
 import websiteToolsRoutes from './modules/websiteTools';
 
 export const appRoutes = [
   ...dashboardRoutes,
+  ...myAccountRoutes,
   ...adminToolsRoutes,
   ...websiteToolsRoutes
 ];
@@ -34,25 +36,6 @@ const constantRoutes = [
     hidden: true
   }
 ];
-
-/*
-{
-  path: '/my-account',
-  component: Layout,
-  children: [
-    {
-      path: '',
-      component: () => import('@/views/my-account/index'),
-      name: 'MyAccount',
-      meta: { 
-        title: 'My Account', 
-        icon: 'mdi-antenna'
-      },
-    }
-  ],
-},
-*/
-
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

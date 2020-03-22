@@ -2,8 +2,8 @@
   <div class="navbar">
     <v-spacer></v-spacer>
 
-    <v-btn icon>
-      <v-icon>mdi-magnify</v-icon>
+    <v-btn icon :to="{name: 'my-account'}">
+      <v-icon>face</v-icon>
     </v-btn>
 
     <v-btn icon :to="{name: 'auth.logout'}">
