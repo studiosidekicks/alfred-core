@@ -44,11 +44,13 @@ class BackAuthService implements BackAuthServiceContract
         return [['exists' => $exists], false];
     }
 
-    public function createPrimaryAccount(string $email)
+    public function createPrimaryAccount(string $email, string $firstName, string $lastName)
     {
         $password = $this->generatePassword();
         $data = [
             'email' => $email,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'password' => $password,
             'is_super_admin' => true,
         ];

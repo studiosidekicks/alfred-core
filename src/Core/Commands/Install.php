@@ -147,8 +147,10 @@ class Install extends Command
         }
 
         $primaryAccountEmail = $this->askForEmail();
+        $firstName = $this->askForName('First name');
+        $lastName = $this->askForName('Last name');
 
-        $password = BackAuth::createPrimaryAccount($primaryAccountEmail);
+        $password = BackAuth::createPrimaryAccount($primaryAccountEmail, $firstName, $lastName);
 
         if ($password) {
             $this->alert('Generated password for the user:');
@@ -199,5 +201,10 @@ class Install extends Command
         Artisan::call('migrate');
 
         echo Artisan::output();
+    }
+
+    private function askForName($stringPrefix)
+    {
+        return $this->ask($stringPrefix . ' for primary account?');
     }
 }
