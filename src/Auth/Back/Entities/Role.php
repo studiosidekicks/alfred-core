@@ -10,6 +10,8 @@ class Role extends EloquentRole
 {
     use HasSlug;
 
+    protected $appends = ['is_deletable'];
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -17,4 +19,8 @@ class Role extends EloquentRole
             ->saveSlugsTo('slug');
     }
 
+    public function getIsDeletableAttribute()
+    {
+        return !$this->users()->exists();
+    }
 }

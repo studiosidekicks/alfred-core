@@ -4,6 +4,7 @@ namespace Studiosidekicks\Alfred\Auth\Back\Repositories;
 
 use Studiosidekicks\Alfred\Auth\Back\Contracts\RoleRepositoryContract;
 use Cartalyst\Sentinel\Roles\IlluminateRoleRepository;
+use Studiosidekicks\Alfred\Pagination\Services\PaginationHelper;
 
 class RoleRepository extends IlluminateRoleRepository implements RoleRepositoryContract
 {
@@ -17,7 +18,8 @@ class RoleRepository extends IlluminateRoleRepository implements RoleRepositoryC
 
     public function get(array $columns = ['*'])
     {
-        return $this->queryModel->get($columns);
+        $paginationHelper = new PaginationHelper();
+        return $paginationHelper->resolveQuery($this->queryModel, $columns);
     }
 
     public function create(array $data)
